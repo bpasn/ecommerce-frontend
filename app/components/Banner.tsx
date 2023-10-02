@@ -1,3 +1,4 @@
+'use client';
 import { Carousel } from "react-responsive-carousel";
 import slider1 from '@/app/assets/slider/sliderImg_1.jpg'
 import slider2 from '@/app/assets/slider/sliderImg_2.jpg'

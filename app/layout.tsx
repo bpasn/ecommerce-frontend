@@ -1,3 +1,4 @@
+import Header from './components/navbar/Header'
 import './globals.css'
 export default function RootLayout({
   children,
