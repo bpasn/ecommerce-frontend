@@ -1,12 +1,20 @@
-import React from 'react'
-import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
-import Banner from '../components/Banner';
-
+'use client';
+import { useStoreModal } from '@/hooks/use-store-modal';
+import React, { useEffect } from 'react'
 
 export default function MyApp(){
+  const onOpen:() => void = useStoreModal(state => state.onOpen);
+  const isOpen: boolean = useStoreModal(state => state.isOpen);
+  
+  useEffect(() => {
+    if(!isOpen){
+      onOpen()
+    }
+  },[onOpen,isOpen])
+  
   return (
     <div>
-      <Banner />
+     root page
     </div>
   );
 }

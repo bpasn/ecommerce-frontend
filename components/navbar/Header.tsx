@@ -2,10 +2,11 @@
 import Link from 'next/link'
 import React from 'react'
 import Image from 'next/image'
-import Logo from "@/app/assets/logo.png";
-import CartImage from "@/app/assets/cartIcon.png";
+import Logo from "@/assets/logo.png";
+import CartImage from "@/assets/cartIcon.png";
 import { HiOutlineSearch } from 'react-icons/hi';
 import { BiCaretDown } from 'react-icons/bi';
+import { UserButton } from '@clerk/nextjs';
 type HeaderProps = {}
 
 function Header({ }: HeaderProps) {
@@ -33,9 +34,7 @@ function Header({ }: HeaderProps) {
                 </div>
                 {/* signin */}
                 <div className='text-xs text-gray-100 flex flex-col justify-center  px-2 border border-transparent hover:border-white cursor-pointer duration-300 h-[70%] '>
-                    <p>Hello, Sign in</p>
-                    <p className="text-white font-bold flex items-center">Account & Lists
-                        <span><BiCaretDown/></span></p>
+                    <UserButton/>
                 </div>
                 {/* favorite */}
                 <div

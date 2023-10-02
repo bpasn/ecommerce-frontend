@@ -1,0 +1,14 @@
+version: "3.9"
+
+services:
+  database:
+    image: mysql
+    ports:
+      - "3300:3306"
+    volumes:
+      - ./database:/usr/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+      - MYSQL_DATABASE=e-commerce
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=1234

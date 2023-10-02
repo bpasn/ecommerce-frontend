@@ -1,10 +1,12 @@
 'use client';
 import { Carousel } from "react-responsive-carousel";
-import slider1 from '@/app/assets/slider/sliderImg_1.jpg'
-import slider2 from '@/app/assets/slider/sliderImg_2.jpg'
-import slider3 from '@/app/assets/slider/sliderImg_3.jpg'
-import slider4 from '@/app/assets/slider/sliderImg_4.jpg'
+import slider1 from '@/assets/slider/sliderImg_1.jpg'
+import slider2 from '@/assets/slider/sliderImg_2.jpg'
+import slider3 from '@/assets/slider/sliderImg_3.jpg'
+import slider4 from '@/assets/slider/sliderImg_4.jpg'
 import Image from "next/image";
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+
 const Banner = () => {
     return (
         <div className="relative">
