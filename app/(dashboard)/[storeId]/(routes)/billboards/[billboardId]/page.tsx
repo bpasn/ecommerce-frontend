@@ -1,18 +1,26 @@
 import prismadb from '@/lib/prismadb.util'
 import React from 'react'
+import BillboardClient from '../componentx/client'
 
 type Props = {}
 
 const BillboardPage = async ({
     params
-}: { params: { billboardId: string } }) => {
-    const billboaard = await prismadb.billboard.findUnique({
+}: { params: { storeId: string } }) => {
+    const billboaard = await prismadb.billboard.findMany({
         where: {
-            id: params.billboardId
+            storeId: params.storeId
+        },
+        orderBy: {
+            createdAt: "desc"
         }
-    })
+    });
     return (
-        <div>BillboardPage</div>
+        <div className="flex-col">
+            <div className="flex-1 space-y-4 p-8 pt-6">
+                <BillboardClient />
+            </div>
+        </div>
     )
 }
 
