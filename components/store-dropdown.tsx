@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { cn } from '@/lib/utils';
+import { signOut } from 'next-auth/react';
 
 type Props = {}
 
@@ -21,7 +22,9 @@ const StoreDropDown = (props: Props) => {
             <DropdownMenuContent  className="mr-5">
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                {menu.map(m=> (<DropdownMenuItem onClick={() => setSelect(m)} className={cn("cursor-pointer",select && select === m ? "bg-gray-300 hover:bg-gray-300" : "bg-transparent")}>{m}</DropdownMenuItem>))}
+                <DropdownMenuItem className={"cursor-pointer"}>Profile</DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem className={"cursor-pointer"} onClick={() => signOut()}>LogOut</DropdownMenuItem>
                 
             </DropdownMenuContent>
         </DropdownMenu>

@@ -10,20 +10,28 @@ export const authOption = (): NextAuthOptions => {
         secret: process.env.AUTH_SECRET,
         session: { strategy: 'jwt' },
         callbacks: {
-            async jwt({ token, user }: { token: JWT; user?: User }) {
+            async jwt({ token, user }: { token: JWT; user?: User; }) {
                 if (user?.id) token.id = user.id;
-                if (user?.isAdmin) token.isAdmin = user.isAdmin
+                if (user?.isAdmin) token.isAdmin = user.isAdmin;
                 return { ...token, user };
             },
-            async session({ session, token }: { session: Session, token: JWT }) {
+            async session({ session, token }: { session: Session, token: JWT; }) {
 
                 if (token?.id && session.user) session.user.id = token.id;
-                if (token?.isAdmin && session.user) session.user.isAdmin = token.isAdmin
+                if (token?.isAdmin && session.user) session.user.isAdmin = token.isAdmin;
                 return Promise.resolve({ ...session, token });
             }
         },
         providers: [
             GithubProvider({
+                profile(profile, tokens) {
+                    return {
+                        ...profile,
+                        isAdmin:true,
+                        name: profile.name || profile.login,
+                        ...tokens
+                    };
+                },
                 clientId: process.env.GITHUB_ID || "",
                 clientSecret: process.env.GITHUB_SECRET || ""
             })
@@ -33,7 +41,7 @@ export const authOption = (): NextAuthOptions => {
                 //console.log('authError', { code, metadata });
             },
         },
-    })
+    });
 };
 
 

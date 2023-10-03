@@ -32,9 +32,7 @@ const DashboardLayout: React.FC<DashboardProps> = async ({
     }
     return (
         <>
-
             <Navbar />
-            this will be set layout
             {children}
         </>
     )

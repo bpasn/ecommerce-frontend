@@ -18,15 +18,15 @@ const MainNav: React.FC<MainNavProps> = ({
 
     const routes = [
         {
-            href: `/${params.storeId}/settings`,
-            label: "Setting",
-            active: pathname === `/${params.storeId}/settings`
-        },
-        {
             href: `/${params.storeId}/billboards`,
             label: "Billboard",
-            active: pathname === `/${params.storeId}/billboard`
-        }
+            active: pathname === `/${params.storeId}/billboards`
+        },
+        {
+            href: `/${params.storeId}/categories`,
+            label: "Categories",
+            active: pathname === `/${params.storeId}/categories`
+        },
     ]
     return (
         <nav className={cn("flex items-center space-x4 lg:space-x-6", className)}>
