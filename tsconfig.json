@@ -34,7 +34,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "app/layout.tsx"
-  ],
+, "middleware.ts"  ],
   "exclude": [
     "node_modules"
   ]

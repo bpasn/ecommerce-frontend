@@ -1,15 +1,17 @@
+import { authOption } from "@/lib/nextAuthOption";
 import prismadb from "@/lib/prismadb.util";
-import { auth } from "@clerk/nextjs";
 import { Prisma } from "@prisma/client";
-import { NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { NextRequest, NextResponse } from "next/server";
+
 
 export async function POST(
-    req: Request
+    req: NextRequest
 ) {
     try {
         const { name } = await req.json();
-        const { userId } = auth();
-        if (!userId) {
+        const session = await getServerSession(authOption())
+        if (!session?.user?.name) {
             return new NextResponse("Unauthorization", { status: 401 });
         }
         if (!name) return new NextResponse("Name is required", { status: 400 });
@@ -18,7 +20,7 @@ export async function POST(
         const store = await prismadb.store.create({
             data: {
                 name,
-                userId
+                user: session?.user?.name
             }
         });
 
@@ -30,7 +32,7 @@ export async function POST(
                 message = "There is a unique constraint violation, a new Store cannot be create with this name"
             }
         }
-        console.log(error);
+        //console.log(error);
         return new NextResponse(message || "Internal Server Error", { status: 500 });
     }
 }

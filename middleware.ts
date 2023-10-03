@@ -1,10 +1,15 @@
-import { authMiddleware } from "@clerk/nextjs";
+import { getToken } from "next-auth/jwt";
+import { NextResponse, type NextRequest } from "next/server";
 
-// This example protects all routes including api/trpc routes
-// Please edit this to allow other routes to be public as needed.
-// See https://cleark.com/docs/references/nextjs/auth-middleware for more information about configuring you middleware
-export default authMiddleware({});
-
-export const config = {
-    matcher: ['/((?!.+\\.[\\w]+$|_next).*)','/cart','/(api|trpc)(.*)']
+export default async function middleware(req: NextRequest) {
+    const token = await getToken({ req, secret: process.env.AUTH_SECRET });
+    const { pathname, origin } = req.nextUrl;
+    //console.log({ token })
+    if (req.nextUrl.pathname.startsWith("/admin") && !token?.isAdmin) {
+        return NextResponse.redirect(new URL("/unauthorized?message=Permission denied", req.nextUrl))
+    }
+    if (req.url.startsWith("/cart") && !token) {
+        return NextResponse.redirect(new URL("/api/auth/signin", req.nextUrl))
+    }
+    NextResponse.next()
 }

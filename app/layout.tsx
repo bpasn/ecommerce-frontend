@@ -1,22 +1,24 @@
+import NextAuthProvider from '@/providers/authProvider';
 import { ModalProvider } from '@/providers/modal-provider';
 import ToastProvider from '@/providers/toast-provider';
 import '@/styles/globals.css';
-import { ClerkProvider } from '@clerk/nextjs';
-export default function RootLayout({
+import { Session, getServerSession } from 'next-auth';
+import { signOut } from 'next-auth/react';
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-
+  const session = await getServerSession();
   return (
-    <ClerkProvider>
-      <html lang="en">
-        <body>
+    <html lang="en">
+      <body>
+        <NextAuthProvider session={session}>
           <ToastProvider />
           <ModalProvider />
           {children}
-        </body>
-      </html>
-    </ClerkProvider>
+        </NextAuthProvider>
+      </body>
+    </html>
   )
 }
