@@ -28,6 +28,7 @@ export const authOption = (): NextAuthOptions => {
                     return {
                         ...profile,
                         isAdmin:true,
+                        accessToken:"",
                         name: profile.name || profile.login,
                         ...tokens
                     };

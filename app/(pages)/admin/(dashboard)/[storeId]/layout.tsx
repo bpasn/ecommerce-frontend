@@ -26,7 +26,6 @@ const DashboardLayout: React.FC<DashboardProps> = async ({
         }
     });
     
-    console.log({ storeInStoreIdLayout: store })
     if (!store) redirect('/admin');
     return (
         <>

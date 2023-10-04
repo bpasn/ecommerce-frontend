@@ -2,23 +2,33 @@ import NextAuthProvider from '@/providers/authProvider';
 import { ModalProvider } from '@/providers/modal-provider';
 import ToastProvider from '@/providers/toast-provider';
 import '../styles/globals.css';
-import {  getServerSession } from 'next-auth';
-export default async function RootLayout({
+import { getServerSession } from 'next-auth';
+import ReduxStoreProvider from '@/providers/ReduxStoreProvider';
+import LoadingProvider from '@/providers/LoadingProvider';
+
+const RootLayout = async ({
   children,
 }: {
-  children: React.ReactNode
-}) {
+  children: React.ReactNode;
+}) => {
   const session = await getServerSession();
-  return (
-    <html lang="en">
-      <body>
-        <NextAuthProvider session={session}>
-          <ToastProvider />
-          <ModalProvider />
-          {children}
-        </NextAuthProvider>
-      </body>
-    </html>
-  );
   
-}
+  return (
+    <NextAuthProvider session={session}>
+
+      <html lang="en">
+        <body>
+          <LoadingProvider >
+          <ReduxStoreProvider>
+            <ToastProvider />
+            <ModalProvider />
+            {children}
+          </ReduxStoreProvider>
+          </LoadingProvider>
+        </body>
+      </html>
+    </NextAuthProvider>
+  );
+
+};
+export default RootLayout;

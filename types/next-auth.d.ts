@@ -13,6 +13,7 @@ declare module "next-auth" {
         email?: string | null;
         error?: string;
         isAdmin?: boolean;
+        accessToken?:string;
         contactAddress?: {
             id?: string;
         }

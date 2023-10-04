@@ -4,11 +4,11 @@ import Link from 'next/link';
 import { useParams, usePathname } from 'next/navigation';
 import React from 'react';
 
-interface MainNavProps extends React.HTMLAttributes<HTMLElement> {
+interface MainNavClientProps extends React.HTMLAttributes<HTMLElement> {
 
 }
 
-const MainNav: React.FC<MainNavProps> = ({
+const MainNavClient: React.FC<MainNavClientProps> = ({
     className,
     ...props
 }) => {
@@ -17,11 +17,6 @@ const MainNav: React.FC<MainNavProps> = ({
     const params = useParams();
 
     const routes = [
-        {
-            href: `/admin/${params.storeId}/billboards`,
-            label: "Billboard",
-            active: pathname === `/admin/${params.storeId}/billboards`
-        },
         {
             href: `/admin/${params.storeId}/categories`,
             label: "Categories",
@@ -44,4 +39,4 @@ const MainNav: React.FC<MainNavProps> = ({
 
 };
 
-export default MainNav;
+export default MainNavClient;

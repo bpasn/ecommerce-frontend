@@ -1,5 +1,5 @@
 'use client';
-import { useStoreModal } from '@/hooks/use-store-modal'
+import { useStoreModal } from '@/hooks/useStoreModel'
 import React, { useEffect } from 'react'
 
 type Props = {}

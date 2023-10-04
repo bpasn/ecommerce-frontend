@@ -3,7 +3,7 @@ import axios from 'axios';
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Modal from "@/components/ui/modal";
-import { useStoreModal } from "@/hooks/use-store-modal";
+import { useStoreModal } from "@/hooks/useStoreModel";
 import { useForm } from 'react-hook-form';
 import {
     Form,

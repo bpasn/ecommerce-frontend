@@ -1,5 +1,5 @@
 import { ApiAlert } from '@/components/ui/api-alert';
-import { useOrigin } from '@/hooks/use-origin';
+import { useOrigin } from '@/hooks/useOrigin';
 import { useParams } from 'next/navigation';
 import React from 'react';
 
