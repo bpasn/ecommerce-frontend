@@ -1,9 +1,8 @@
 import NextAuthProvider from '@/providers/authProvider';
 import { ModalProvider } from '@/providers/modal-provider';
 import ToastProvider from '@/providers/toast-provider';
-import '@/styles/globals.css';
-import { Session, getServerSession } from 'next-auth';
-import { signOut } from 'next-auth/react';
+import '../styles/globals.css';
+import {  getServerSession } from 'next-auth';
 export default async function RootLayout({
   children,
 }: {
@@ -20,5 +19,6 @@ export default async function RootLayout({
         </NextAuthProvider>
       </body>
     </html>
-  )
+  );
+  
 }

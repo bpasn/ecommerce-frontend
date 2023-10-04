@@ -18,8 +18,6 @@ import { Button } from '../ui/button';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 
-
-
 const formSchema = z.object({
     name: z.string().min(1)
 });
@@ -41,8 +39,8 @@ export const StoreModal = () => {
             const result = await axios.post('/api/stores', values);
             toast.success("Create Store success. with name is :" + result.data.name);
             setTimeout(() => {
-                window.location.assign(`/${result.data.id}`)
-            },1.5 * 1000)
+                window.location.assign(`/admin/${result.data.id}`)
+            }, 1.5 * 1000)
 
         } catch (error) {
             if (axios.isAxiosError(error)) {
@@ -86,8 +84,7 @@ export const StoreModal = () => {
                                     variant={"outline"}
                                     onClick={storeModal.onClose}
                                 >Close</Button>
-                                <Button disabled={loading} type='submit'>Continute</Button>
-
+                                <Button disabled={loading} type='submit'>Continue</Button>
                             </div>
                         </form>
                     </Form>

@@ -19,7 +19,7 @@ const Banner = () => {
                 interval={3000}
             >
                 <div>
-                    <Image priority  src={slider1} alt="sliderImg" />
+                    <Image priority src={slider1} alt="sliderImg" />
                 </div>
                 <div>
                     <Image src={slider2} alt="sliderImg" />
@@ -30,10 +30,8 @@ const Banner = () => {
                 <div>
                     <Image src={slider4} alt="sliderImg" />
                 </div>
-            <div className="w-full h-40 bg-gradient-to-t from-gray-100 to-transparent absolute bottom-0 z-20"></div>
-
             </Carousel>
-
+            <div className="w-full h-40 bg-gradient-to-t from-gray-100 to-transparent absolute bottom-0 z-10" />
         </div>
     )
 }

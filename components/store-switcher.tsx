@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Store } from '@prisma/client';
 import { useStoreModal } from '@/hooks/use-store-modal';
@@ -18,12 +18,14 @@ import {
 } from '@/components/ui/command';
 type PopoverTriggerProps = React.ComponentPropsWithoutRef<typeof PopoverTrigger>;
 interface StoreSwitcherProps extends PopoverTriggerProps {
-  items: Store[];
+  items?: Store[];
+  renderCustom?:() => React.JSX.Element;
 };
 
 const StoreSwitcher: React.FC<StoreSwitcherProps> = ({
   className,
-  items = []
+  items = [],
+  renderCustom
 }) => {
   const storeModal = useStoreModal();
   const params = useParams();
@@ -37,7 +39,7 @@ const StoreSwitcher: React.FC<StoreSwitcherProps> = ({
 
   const onStoreSelect = (store: { value: string, label: string }) => {
     setOpen(false);
-    route.push(`/${store.value}`);
+    route.push(`/admin/${store.value}`);
   };
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -51,7 +53,9 @@ const StoreSwitcher: React.FC<StoreSwitcherProps> = ({
           className={cn("w-[200px] justify-between", className)}
         >
           <StoreIcon className='mr-2 h-4 w-4' />
-          {currentStore?.label}
+          {currentStore?.label ?? (
+            <code className='text-sm text-foreground'>No Store result.</code>
+          )}
           <ChevronsUpDown className='ml-auto h-4 w-4 shrink-0 opacity-50' />
         </Button>
       </PopoverTrigger>
@@ -62,10 +66,10 @@ const StoreSwitcher: React.FC<StoreSwitcherProps> = ({
             <CommandEmpty>No store found.</CommandEmpty>
             <CommandGroup heading="Stores">
               {formattedItems.map(store => (
-                <CommandItem 
-                key={store.value}
-                onSelect={() => onStoreSelect(store)}
-                className='text-sm cursor-pointer'
+                <CommandItem
+                  key={store.value}
+                  onSelect={() => onStoreSelect(store)}
+                  className='text-sm cursor-pointer'
                 >
                   <StoreIcon className='mr-2 h-4 w-4' />
                   {store.label}

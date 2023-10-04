@@ -18,14 +18,14 @@ const MainNav: React.FC<MainNavProps> = ({
 
     const routes = [
         {
-            href: `/${params.storeId}/billboards`,
+            href: `/admin/${params.storeId}/billboards`,
             label: "Billboard",
-            active: pathname === `/${params.storeId}/billboards`
+            active: pathname === `/admin/${params.storeId}/billboards`
         },
         {
-            href: `/${params.storeId}/categories`,
+            href: `/admin/${params.storeId}/categories`,
             label: "Categories",
-            active: pathname === `/${params.storeId}/categories`
+            active: pathname === `/admin/${params.storeId}/categories`
         },
     ]
     return (
