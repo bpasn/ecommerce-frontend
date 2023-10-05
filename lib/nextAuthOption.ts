@@ -7,8 +7,11 @@ export const authOption = (): NextAuthOptions => {
         pages: {
             signOut: "/api/auth/signin"
         },
-        secret: process.env.AUTH_SECRET,
+        secret: process.env.NEXTAUTH_SECRET,
         session: { strategy: 'jwt' },
+        jwt:{
+            secret:process.env.NEXTAUTH_SECRET,
+        },
         callbacks: {
             async jwt({ token, user }: { token: JWT; user?: User; }) {
                 if (user?.id) token.id = user.id;
@@ -24,11 +27,16 @@ export const authOption = (): NextAuthOptions => {
         },
         providers: [
             GithubProvider({
-                profile(profile, tokens) {
+                authorization: {
+                    request: ({ client }) => {
+                        console.log({ client });
+                    }
+                },
+                async profile(profile, tokens) {
                     return {
                         ...profile,
-                        isAdmin:true,
-                        accessToken:"",
+                        isAdmin: true,
+                        accessToken: "",
                         name: profile.name || profile.login,
                         ...tokens
                     };

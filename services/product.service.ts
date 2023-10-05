@@ -5,8 +5,8 @@ export default class ProductService implements IProductService {
         this.sAxios = sAxios;
     }
     async getProduct(): Promise<IProductModel[]> {
-        const response = await this.sAxios.get<IProductModel[]>("https://fakestoreapi.com/products");
-        return response;
+        // const response = await this.sAxios.get<IProductModel[]>("https://fakestoreapi.com/products");
+        return [];
     }
     async getProductById(id: string): Promise<IProductModel> {
         const response = await this.sAxios.get<IProductModel>(`https://fakestoreapi.com/products/${id}`);
