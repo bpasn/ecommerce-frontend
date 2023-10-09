@@ -5,15 +5,15 @@ import { Separator } from '@/components/ui/separator';
 import { Plus } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
 import React from 'react';
-import { columns, CategoryColumns } from './columns';
+import { columns, BillboardColumns } from './columns';
 import Heading from '@/components/ui/heading';
 import ApiList from './api-list';
 
-interface CategoryClientProps {
-    data: CategoryColumns[];
+interface BillboardClientProps {
+    data: BillboardColumns[];
 }
 
-const CategoryClient: React.FC<CategoryClientProps> = ({
+const BillboardClient: React.FC<BillboardClientProps> = ({
     data
 }) => {
     const router = useRouter();
@@ -23,27 +23,27 @@ const CategoryClient: React.FC<CategoryClientProps> = ({
         <>
             <div className="flex items-center justify-between">
                 <Heading
-                    title={`Categorys(${data.length})`}
-                    description='Categorys'
+                    title={`Billboards(${data.length})`}
+                    description='Billboards'
                 />
-                <Button onClick={() => router.push(`/admin/${params.storeId}/categories/new`)}>
+                <Button onClick={() => router.push(`/admin/billboards/new`)}>
                     <Plus className="mr-2 h-4 w-4" />
                     Add New
                 </Button>
             </div>
             <Separator />
-            <DataTable columns={columns} data={data} searchKey='name' />
+            <DataTable columns={columns} data={data} searchKey='label' />
             <Separator />
             <Heading
                 title='Api'
-                description='API calls for Category'
+                description='API calls for Billboard'
             />
             <ApiList
-                entityName={'Categories'}
-                entityIdName={"CategoryId"}
+                entityName={'Billboards'}
+                entityIdName={"billboardId"}
             />
         </>
     );
 };
 
-export default CategoryClient;
+export default BillboardClient;

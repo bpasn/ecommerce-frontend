@@ -27,11 +27,6 @@ export const authOption = (): NextAuthOptions => {
         },
         providers: [
             GithubProvider({
-                authorization: {
-                    request: ({ client }) => {
-                        console.log({ client });
-                    }
-                },
                 async profile(profile, tokens) {
                     return {
                         ...profile,
@@ -47,7 +42,7 @@ export const authOption = (): NextAuthOptions => {
         ],
         logger: {
             error(code, metadata) {
-                //console.log('authError', { code, metadata });
+                console.log('authError', { code, metadata });
             },
         },
     });

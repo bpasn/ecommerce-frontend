@@ -35,7 +35,8 @@
     ".next/types/**/*.ts",
     "app/layout.tsx",
     "middleware.ts",
-    "app/(pages)/layout.tsx.back"
+    "app/(pages)/layout.tsx.back",
+    "app/(pages)/admin/layout.tsx"
   ],
   "exclude": [
     "node_modules"

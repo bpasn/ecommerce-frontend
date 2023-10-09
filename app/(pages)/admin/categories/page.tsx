@@ -14,20 +14,20 @@ interface CategoryPageProps {
 const CategoryPage: React.FC<CategoryPageProps> = async ({
   params
 }) => {
-  const categorys: Category[] = await prismadb.category.findMany({
-    where: {
-      storeId: params.storeId
-    },
-    orderBy: {
-      createdAt: "desc"
-    }
-  });
+  // const categorys: Category[] = await prismadb.category.findMany({
+  //   where: {
+  //     storeId: params.storeId
+  //   },
+  //   orderBy: {
+  //     createdAt: "desc"
+  //   }
+  // });
 
-  const formattedCategorys: CategoryColumns[] = categorys.map((item: Category) => ({
-    id: item.id as string,
-    name: item.name,
-    createdAt: format(item.createdAt, "MMM do, yyyy")
-  }));
+  // const formattedCategorys: CategoryColumns[] = categorys.map((item: Category) => ({
+  //   id: item.id as string,
+  //   name: item.name,
+  //   createdAt: format(item.createdAt, "MMM do, yyyy")
+  // }));
 
 
   return (

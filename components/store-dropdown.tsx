@@ -13,9 +13,7 @@ interface StoreDropDownProps {
 
 const StoreDropDown: React.FC<
     StoreDropDownProps
-    & ReduxStoreDropDownProps
 > = ({
-    cartItem
 }) => {
         const { data: session } = useSession();
         const router = useRouter();
@@ -56,4 +54,4 @@ const mapState = (state: AppState) => ({
 });
 const reduxMapper = connect(mapState);
 type ReduxStoreDropDownProps = ConnectedProps<typeof connect>;
-export default reduxMapper(StoreDropDown); // what is means connect(() => StoreDropDown)
+export default StoreDropDown; // what is means connect(() => StoreDropDown)

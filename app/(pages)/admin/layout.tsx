@@ -1,3 +1,4 @@
+import Navbar from "@/components/navbar/Navbar";
 import { authOption } from "@/lib/nextAuthOption";
 import prismadb from "@/lib/prismadb.util";
 import { getServerSession } from "next-auth";
@@ -22,11 +23,12 @@ const SetupLayoutAdmin: React.FC<{
             user: session && session.user?.name
         }
     });
-    if (store) {
-        redirect(`/admin/${store.id}`);
-    }
+    // if (store) {
+    //     redirect(`/admin/${store.id}`);
+    // }
     return (
         <>
+        <Navbar/>
             {children}
         </>
     );

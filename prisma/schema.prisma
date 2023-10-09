@@ -16,7 +16,7 @@ model Store {
   id        String @id @default(uuid())
   name      String @unique
   user      String?
-  category  Category[] @relation("StoreToCategory")
+  // category  Category[] @relation("StoreToCategory")
   billboard Billboard[] @relation("StoreToBillboard")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -29,7 +29,7 @@ model Billboard {
   store     Store @relation("StoreToBillboard",fields:[storeId],references:[id])
   label     String
   imageUrl  String
-  categories  Category[]
+  // categories  Category[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -38,14 +38,14 @@ model Billboard {
 
 model Category {
   id          String    @id @default(uuid())
-  storeId     String
-  store       Store @relation("StoreToCategory",fields: [storeId],references: [id])
-  billboardId String
-  billboard   Billboard @relation(fields: [billboardId],references: [id])
+  // storeId     String
+  // store       Store @relation("StoreToCategory",fields: [storeId],references: [id])
+  // billboardId String
+  // billboard   Billboard @relation(fields: [billboardId],references: [id])
   name        String 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  @@index([storeId])
-  @@index([billboardId])
+  // @@index([storeId])
+  // @@index([billboardId])
 }

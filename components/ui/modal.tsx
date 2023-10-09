@@ -7,13 +7,15 @@ import {
     DialogHeader,
     DialogTitle
 } from '@/components/ui/dialog';
+import { cn } from '@/lib/utils';
 
 interface ModalProps {
     title: string;
     description: string;
     isOpen: boolean;
     onClose: () => void;
-    children?: React.ReactNode
+    children?: React.ReactNode;
+    size?:"sm" | "md" | "lg"
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -21,7 +23,8 @@ const Modal: React.FC<ModalProps> = ({
     description,
     isOpen,
     onClose,
-    children
+    children,
+    size = "md"
 }) => {
     const onChange = (open: boolean) => {
         if (!open) {
@@ -30,7 +33,9 @@ const Modal: React.FC<ModalProps> = ({
     }
     return (
         <Dialog open={isOpen} onOpenChange={onChange}>
-            <DialogContent>
+            <DialogContent style={{
+                width: size==="md" ? "700px": size === "lg" ? "900px" : "300px"
+            }}>
                 <DialogHeader>
                     <DialogTitle>{title}</DialogTitle>
                     <DialogDescription>

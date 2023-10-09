@@ -5,6 +5,7 @@ import BillboardForm from './components/billboard-form';
 const BillboardPage = async ({
     params
 }: { params: { billboardId: string; }; }) => {
+    await new Promise(res => setTimeout(res, 2000))
     const billboard = await prismadb.billboard.findFirst({
         where: {
             id: params.billboardId

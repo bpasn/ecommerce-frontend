@@ -1,6 +1,6 @@
 import prismadb from '@/lib/prismadb.util';
 import React from 'react';
-import CategoryForm from './components/category-form';
+import CategoryForm from '../components/category-form';
 
 const CategoryPage = async ({
     params
@@ -13,7 +13,7 @@ const CategoryPage = async ({
     return (
         <div className="flex-col">
             <div className="flex-1 space-y-4 p-8 pt-6">
-                <CategoryForm initialData={Category}/>
+                Categories id
             </div>
         </div>
     );
