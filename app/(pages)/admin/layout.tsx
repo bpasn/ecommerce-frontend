@@ -12,10 +12,10 @@ const SetupLayoutAdmin: React.FC<{
     const session = await getServerSession(authOption());
 
     // Check exists session
-    if(!session?.user) redirect("/api/auth/signin");
+    // if(!session?.user) redirect("/api/auth/signin");
 
     // Check permission
-    if(session.user && !session.user.isAdmin) redirect("/unauthorized?message=Access Denied")
+    // if(session.user && !session.user.isAdmin) redirect("/unauthorized?message=Access Denied")
     
     // Get result from entity Store with prismadb
     const store = await prismadb.store.findFirst({

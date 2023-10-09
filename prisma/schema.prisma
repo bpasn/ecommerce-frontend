@@ -41,11 +41,38 @@ model Category {
   // storeId     String
   // store       Store @relation("StoreToCategory",fields: [storeId],references: [id])
   // billboardId String
-  // billboard   Billboard @relation(fields: [billboardId],references: [id])
+  product     Products[] @relation("CategoryToProduct")
   name        String 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
   // @@index([storeId])
   // @@index([billboardId])
+}
+
+model Products {
+  id            String           @id @default(uuid())
+  categoryId    String
+  category      Category @relation("CategoryToProduct",fields: [categoryId],references: [id])
+  name 		  		String  @unique
+  description   String?
+  image         ImageProduct[]
+  price         Decimal
+  qty           Int
+  sku           String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+
+  @@index([categoryId])
+}
+
+model ImageProduct {
+  id            String @id @default(uuid())
+  productId 		String 
+  product       Products @relation(fields: [productId],references: [id],onDelete: Cascade) 
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([productId])
 }

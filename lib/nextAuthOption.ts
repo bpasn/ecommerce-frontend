@@ -42,7 +42,7 @@ export const authOption = (): NextAuthOptions => {
         ],
         logger: {
             error(code, metadata) {
-                console.log('authError', { code, metadata });
+                // console.log('authError', { code, metadata });
             },
         },
     });

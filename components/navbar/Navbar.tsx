@@ -9,9 +9,9 @@ type Props = {}
 
 const Navbar =  (props: Props) => {
   const {data:session} = useSession();
-  if (!session?.user) {
-    redirect('/api/auth/signin');
-  }
+  // if (!session?.user) {
+  //   redirect('/api/auth/signin');
+  // }
   // const stores = await prismadb.store.findMany({
   //   where: {
   //     user: session.user.name

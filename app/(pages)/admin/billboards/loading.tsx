@@ -1,7 +1,8 @@
-'use client';
-type Props = {};
+import React, { Suspense } from 'react'
 
-const Backdrop = (props: Props) => {
+type Props = {}
+
+const Loading = (props: Props) => {
     return (
         <div className="bg-white/[.9] bg-opacity-50 fixed flex justify-center items-center top-0 left-0 right-0 z-50 p-4 overflow-x-hidden overflow-y-auto md:inset-0 max-h-full min-h-full">
             <div role="status" className="absolute -translate-x1/2 -translate-y-1/2 top-2/4 left-1/2">
@@ -9,7 +10,7 @@ const Backdrop = (props: Props) => {
                 <span className="sr-only">...loading</span>
             </div>
         </div>
-    );
-};
+    )
+}
 
-export default Backdrop;
+export default Loading

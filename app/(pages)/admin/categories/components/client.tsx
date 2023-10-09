@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { DataTable } from '@/components/ui/data-table';
 import { Separator } from '@/components/ui/separator';
 import { Plus } from 'lucide-react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import React, { useState } from 'react';
 import { columns, CategoryColumns } from './columns';
 import Heading from '@/components/ui/heading';
@@ -15,6 +15,7 @@ import toast from 'react-hot-toast';
 import { useStoreAlert } from '@/hooks/useStoreAlert';
 import Error from 'next/error';
 import axios from 'axios';
+import { useStoreModalForm } from '@/hooks/useStoreModalForm';
 
 interface CategoryClientProps {
     data: CategoryColumns[];
@@ -24,54 +25,35 @@ const CategoryClient: React.FC<CategoryClientProps> = ({
     data
 }) => {
     const router = useRouter();
-    const params = useParams();
-    const useStoreModel = useStoreModal();
-    const storeAlert = useStoreAlert(s => s);
-    const [isOpen, setIsOpen] = useState(false);
-
-    const onSubmit = async (data: CategoryFormValues) => {
-       try {
-        const response = await axios.post("/api/categories",{
-            nnnn:"test"
-        })
-        console.log(response)
-       } catch (error:any) {
-        storeAlert.onShow("error",error.message)
-       }
-    }
     return (
         <>
-            <StoreModalForm
-                size="md"
-                title={'Create Categories'}
-                body={<CategoryForm onSubmit={onSubmit} />}
-                description={'Create categories'}
-                isOpen={isOpen}
-                onClose={() => setIsOpen(!isOpen)
-                }
-            />
-
             <div className="flex items-center justify-between">
                 <Heading
                     title={`Categorys(${data.length})`}
                     description='Categorys'
                 />
-                <Button onClick={() => setIsOpen(!isOpen)}>
+                <Button onClick={() => router.push(`/admin/categories/new`)}>
                     <Plus className="mr-2 h-4 w-4" />
                     Add New
                 </Button>
             </div>
             <Separator />
             <DataTable columns={columns} data={data} searchKey='name' />
-            <Separator />
+
+            {/* <Separator />
             <Heading
                 title='Api'
                 description='API calls for Category'
             />
-            <ApiList
-                entityName={'Categories'}
-                entityIdName={"CategoryId"}
-            />
+             {
+                data.map(item => (
+                    <ApiList
+                    key={item.id}
+                        entityName={'Categories'}
+                        entityIdName={"CategoryId"}
+                    />
+                ))
+            } */}
         </>
     );
 };

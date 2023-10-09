@@ -17,15 +17,20 @@ const MainNav: React.FC<MainNavProps> = ({
     const params = useParams();
 
     const routes = [
-        {
-            href: `/admin/billboards`,
-            label: "Billboard",
-            active: pathname === `/admin/billboards`
-        },
+        // {
+        //     href: `/admin/billboards`,
+        //     label: "Billboard",
+        //     active: pathname === `/admin/billboards`
+        // },
         {
             href: `/admin/categories`,
             label: "Categories",
             active: pathname === `/admin/categories`
+        },
+        {
+            href: `/admin/products`,
+            label: "Products",
+            active: pathname === `/admin/products`
         },
     ];
     return (

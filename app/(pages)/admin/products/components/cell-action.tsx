@@ -1,7 +1,7 @@
 "use client";
 
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { CategoryColumns } from "./columns";
+import { ProductColumns } from "./columns";
 import { Button } from "@/components/ui/button";
 import { Copy, Edit, MoreHorizontal, Trash } from "lucide-react";
 import toast from "react-hot-toast";
@@ -11,7 +11,7 @@ import { useState } from "react";
 import axios from "axios";
 
 interface CellProps {
-    data: CategoryColumns;
+    data: ProductColumns;
 }
 
 
@@ -24,7 +24,7 @@ export const CellAction: React.FC<CellProps> = ({
     const [loading, setLoading] = useState(false);
     const onCopy = (id: string) => {
         navigator.clipboard.writeText(id);
-        toast.success("Category Id copied to the clipboard");
+        toast.success("Product Id copied to the clipboard");
     };
 
     const onDelete = async () => {

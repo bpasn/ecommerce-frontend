@@ -4,16 +4,16 @@ import CategoryForm from '../components/category-form';
 
 const CategoryPage = async ({
     params
-}: { params: { CategoryId: string; }; }) => {
-    const Category = await prismadb.category.findFirst({
+}: { params: { categoryId: string; }; }) => {
+    const category = await prismadb.category.findFirst({
         where: {
-            id: params.CategoryId
+            id: params.categoryId
         },
     });
     return (
         <div className="flex-col">
             <div className="flex-1 space-y-4 p-8 pt-6">
-                Categories id
+                <CategoryForm initalState={category} />
             </div>
         </div>
     );
