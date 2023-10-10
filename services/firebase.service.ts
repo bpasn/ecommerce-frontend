@@ -1,5 +1,5 @@
 import { storage } from "@/lib/firebase.config";
-import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { deleteObject, getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 
 export const uploadImageToFirebase = async (filepath: string, file: File): Promise<string> => new Promise(
     (resolve, reject) => {
@@ -16,7 +16,6 @@ export const uploadImageToFirebase = async (filepath: string, file: File): Promi
                 // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
                 const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                 console.log("Upload is " + progress + "% done");
-                
                 switch (snapshot.state) {
                     case 'paused':
                         console.log("Upload is paused");
@@ -28,15 +27,22 @@ export const uploadImageToFirebase = async (filepath: string, file: File): Promi
             },
             error => {
                 //Handle unsuccessful uploads
-                reject(error.message)
+                reject(error.message);
             },
             () => {
                 // Handle successful uploads on complete
                 // For instance, get the download URL: https://firebasestorage.googleapis.com/
                 getDownloadURL(uploadTask.snapshot.ref).then(downloadURL => {
-                    resolve(downloadURL)
-                })
+                    resolve(downloadURL);
+                });
             }
-        )
+        );
     }
 );
+
+export const removeImageFromFirebase = async (url: string) => {
+    const _ref = ref(storage, url);
+   await deleteObject(_ref)
+        .then(() => Promise.resolve("Delete image success."))
+        .catch((e: any) => Promise.reject(e.message))
+};

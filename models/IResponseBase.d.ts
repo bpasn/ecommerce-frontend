@@ -5,6 +5,5 @@ interface IResponseBase<T> {
 }
 interface IResponse{
     success:boolean;
-    method:string;
     message:string
 }

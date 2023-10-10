@@ -26,10 +26,10 @@ const formSchema = z.object({
   productName: z.string().min(1),
   categoryId: z.string().min(1),
   price: z.coerce.number().min(1),
-  qty: z.number().min(1),
+  qty: z.string().min(1),
   sku: z.string(),
   description: z.string().nullable(),
-  image: z.object({
+  images: z.object({
     image: z.string()
   }).array()
 
@@ -38,9 +38,9 @@ const formSchema = z.object({
 export type ProductFormValues = z.infer<typeof formSchema>;
 interface ProductFormProp {
   initialState: Products & {
-    image: ImageProduct[]
+    images: ImageProduct[];
   } | null;
-  categoryOption: OptionSelect[]
+  categoryOption: OptionSelect[];
 };
 const variantMap: Record<UseStoreAlert['title'], VariantProps<typeof alertVariants>['variant']> = {
   "success": "success",
@@ -59,15 +59,16 @@ const ProductForm: React.FC<ProductFormProp> = ({
     defaultValues: initialState ? {
       ...initialState,
       price: parseFloat(String(initialState.price)),
+      qty: initialState.qty.toString()
     }
       : {
         productName: "",
         categoryId: "",
         description: "",
         price: Number(parseFloat(String(0)).toFixed(2)),
-        qty: 0,
+        qty: "0",
         sku: "",
-        image: []
+        images: []
 
       }
   });
@@ -103,29 +104,25 @@ const ProductForm: React.FC<ProductFormProp> = ({
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
           <FormField
-            name="image"
+            name="images"
             control={form.control}
             render={({ field }) => {
-              console.log(field.value)
+              console.log(field.value);
               return (
                 <FormItem>
-                  <FormLabel>Image</FormLabel>
+                  <FormLabel>Images</FormLabel>
                   <FormControl>
                     <ImageUpload
-                      value={field.value ? field.value.map(e => e.image) : []}
-                      onChange={(file) => {
-                        let image = [...field.value,{
-                          image: file
-                        }];
-                        return field.onChange(image)
+                      value={field.value.map(img => img.image)}
+                      onChange={(image) => {
+                        field.value = [...field.value, { image }];
+                        return field.onChange(field.value);
                       }}
-                      onRemove={function (val: string): void {
-                        throw new Error("Function not implemented.");
-                      }}
+                      onRemove={(image) => field.onChange(field.value.filter(img => img.image != image))}
                     />
                   </FormControl>
                 </FormItem>
-              )
+              );
             }}
           />
           <div className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">

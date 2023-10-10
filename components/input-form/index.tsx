@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import {
     Control,
     FieldPath,
@@ -28,19 +28,21 @@ export declare type UseControllerProps<
     TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > = {
     name: TName,
-    control?: Control<TFieldValues>
-}
+    control?: Control<TFieldValues>,
+};
 interface InputFormProps<T extends FieldValues> extends UseControllerProps<T> {
     formLabel: string;
     disabled?: boolean;
     placeholder?: string;
+    onChange?: React.ChangeEventHandler<HTMLInputElement>
 }
 export function InputForm<T extends FieldValues>({
     formLabel,
     control,
     name,
     disabled = false,
-    placeholder = "Please enter your " + name
+    placeholder = "Please enter your " + name,
+    onChange
 }: InputFormProps<T>) {
     return (
         <FormField
@@ -56,7 +58,7 @@ export function InputForm<T extends FieldValues>({
                 </FormItem>
             )}
         />
-    )
+    );
 }
 export function TextareaForm<T extends FieldValues>({
     formLabel,
@@ -66,7 +68,7 @@ export function TextareaForm<T extends FieldValues>({
     placeholder = "Please enter your " + name,
     className
 }: InputFormProps<T> & {
-    className?: string
+    className?: string;
 }) {
     return (
         <FormField
@@ -82,7 +84,7 @@ export function TextareaForm<T extends FieldValues>({
                 </FormItem>
             )}
         />
-    )
+    );
 }
 
 
@@ -91,7 +93,7 @@ export interface OptionSelect {
     value: string;
 }
 interface SelectFieldProps<T extends FieldValues> extends InputFormProps<T> {
-    options: OptionSelect[]
+    options: OptionSelect[];
 }
 export function SelectField<T extends FieldValues>({
     formLabel,
@@ -136,5 +138,5 @@ export function SelectField<T extends FieldValues>({
                 </FormItem>
             )}
         />
-    )
+    );
 }

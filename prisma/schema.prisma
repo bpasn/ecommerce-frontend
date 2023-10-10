@@ -56,7 +56,7 @@ model Products {
   category      Category         @relation("CategoryToProduct",fields: [categoryId],references: [id])
   productName 	String  @unique
   description   String?
-  image         ImageProduct[]
+  images         ImageProduct[]
   price         Decimal
   qty           Int
   sku           String
