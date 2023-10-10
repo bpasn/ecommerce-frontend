@@ -37,7 +37,7 @@
     "middleware.ts",
     "app/(pages)/layout.tsx.back",
     "app/(pages)/admin/layout.tsx"
-  ],
+, "tailwind.config.ts"  ],
   "exclude": [
     "node_modules"
   ]

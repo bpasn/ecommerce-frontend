@@ -22,7 +22,7 @@ const ProductPage: React.FC<ProductPageProps> = async ({
 
   const formattedProducts: ProductColumns[] = Products.map((item: Products) => ({
     id: item.id as string,
-    name: item.name,
+    name: item.productName,
     createdAt: format(item.createdAt, "MMM do, yyyy")
   }));
 

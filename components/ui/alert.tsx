@@ -8,9 +8,9 @@ export const alertVariants = cva(
   {
     variants: {
       variant: {
-        success: "alert-shadcn-success text-foreground",
+        success: "alert-success text-foreground",
         error:
-          "alert-shadcn-error border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive",
+          "alert-error border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive",
       },
     },
     defaultVariants: {

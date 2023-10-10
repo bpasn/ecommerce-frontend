@@ -33,14 +33,14 @@ export type CategoryFormValues = z.infer<typeof formSchema>;
 
 
 interface CategoryFormProp {
-  initalState: Category | null;
+  initialState: Category | null;
 };
 const variantMap: Record<UseStoreAlert['title'], VariantProps<typeof alertVariants>['variant']> = {
   "success": "success",
   "error": "error"
 };
 const CategoryForm: React.FC<CategoryFormProp> = ({
-  initalState
+  initialState
 }) => {
   const params = useParams();
   const [loading, setLoading] = useState(false);
@@ -48,7 +48,7 @@ const CategoryForm: React.FC<CategoryFormProp> = ({
 
   const form = useForm<CategoryFormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: initalState || {
+    defaultValues: initialState || {
       name: "",
     }
   });
@@ -57,7 +57,7 @@ const CategoryForm: React.FC<CategoryFormProp> = ({
     setLoading(true);
     try {
       let response;
-      if (!initalState) {
+      if (!initialState) {
         response = await axios.post<IResponse>("/api/categories", data);
       } else {
         response = await axios.patch<IResponse>(`/api/categories/${params.categoryId}`, data);
@@ -70,8 +70,8 @@ const CategoryForm: React.FC<CategoryFormProp> = ({
       window.location.href = "/admin/categories";
     }
   };
-  const title = initalState ? "Edit Categories" : "Create Categories";
-  const description = initalState ? "Update your Categories" : "Add new categories";
+  const title = initialState ? "Edit Categories" : "Create Categories";
+  const description = initialState ? "Update your Categories" : "Add new categories";
   return (
     <>
       <Heading title={title} description={description} />

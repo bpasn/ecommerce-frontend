@@ -6,38 +6,49 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
-import { Products } from "@prisma/client";
+import { ImageProduct, Products } from "@prisma/client";
 import Heading from "@/components/ui/heading";
 import axios from "axios";
 import { UseStoreAlert, useStoreAlert } from "@/hooks/useStoreAlert";
 import { Alert, AlertDescription, AlertTitle, alertVariants } from "@/components/ui/alert";
 import { VariantProps } from "class-variance-authority";
-import { useParams, useRouter } from "next/navigation";
-import { wait } from "@/lib/utils";
+import { useParams } from "next/navigation";
+import { cn, wait } from "@/lib/utils";
+import { InputForm, OptionSelect, SelectField, TextareaForm } from "@/components/input-form";
+import { ImageUpload } from "@/components/ui/image-upload";
 
 const formSchema = z.object({
-  name: z.string().min(1),
+  productName: z.string().min(1),
+  categoryId: z.string().min(1),
+  price: z.coerce.number().min(1),
+  qty: z.number().min(1),
+  sku: z.string(),
+  description: z.string().nullable(),
+  image: z.object({
+    image: z.string()
+  }).array()
+
 });
 
 export type ProductFormValues = z.infer<typeof formSchema>;
-
-
 interface ProductFormProp {
-  initalState: Products | null;
+  initialState: Products & {
+    image: ImageProduct[]
+  } | null;
+  categoryOption: OptionSelect[]
 };
 const variantMap: Record<UseStoreAlert['title'], VariantProps<typeof alertVariants>['variant']> = {
   "success": "success",
   "error": "error"
 };
 const ProductForm: React.FC<ProductFormProp> = ({
-  initalState
+  initialState,
+  categoryOption
 }) => {
   const params = useParams();
   const [loading, setLoading] = useState(false);
@@ -45,16 +56,27 @@ const ProductForm: React.FC<ProductFormProp> = ({
 
   const form = useForm<ProductFormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: initalState || {
-      name: "",
+    defaultValues: initialState ? {
+      ...initialState,
+      price: parseFloat(String(initialState.price)),
     }
+      : {
+        productName: "",
+        categoryId: "",
+        description: "",
+        price: Number(parseFloat(String(0)).toFixed(2)),
+        qty: 0,
+        sku: "",
+        image: []
+
+      }
   });
   const onSubmit = async (data: ProductFormValues) => {
     storeAlert.onHide();
     setLoading(true);
     try {
       let response;
-      if (!initalState) {
+      if (!initialState) {
         response = await axios.post<IResponse>("/api/products", data);
       } else {
         response = await axios.patch<IResponse>(`/api/products/${params.ProductId}`, data);
@@ -67,8 +89,8 @@ const ProductForm: React.FC<ProductFormProp> = ({
       window.location.href = "/admin/products";
     }
   };
-  const title = initalState ? "Edit Product" : "Create Product";
-  const description = initalState ? "Update your Product" : "Add new Product";
+  const title = initialState ? "Edit Product" : "Create Product";
+  const description = initialState ? "Update your Product" : "Add new Product";
   return (
     <>
       <Heading title={title} description={description} />
@@ -80,21 +102,70 @@ const ProductForm: React.FC<ProductFormProp> = ({
       </Alert>}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
-          <div className="grid grid-cols-1 gap-8">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
+          <FormField
+            name="image"
+            control={form.control}
+            render={({ field }) => {
+              console.log(field.value)
+              return (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>Image</FormLabel>
                   <FormControl>
-                    <Input disabled={loading} placeholder="Product label" {...field} />
+                    <ImageUpload
+                      value={field.value ? field.value.map(e => e.image) : []}
+                      onChange={(file) => {
+                        let image = [...field.value,{
+                          image: file
+                        }];
+                        return field.onChange(image)
+                      }}
+                      onRemove={function (val: string): void {
+                        throw new Error("Function not implemented.");
+                      }}
+                    />
                   </FormControl>
-                  <FormMessage />
                 </FormItem>
-              )}
+              )
+            }}
+          />
+          <div className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {/* Product Name */}
+            <InputForm
+              control={form.control}
+              formLabel="Product Name"
+              name="productName"
+            />
+            {/* select */}
+            <SelectField
+              control={form.control}
+              formLabel={"Category Name"}
+              placeholder="Choose your category name"
+              name={"categoryId"}
+              options={categoryOption}
+            />
+
+            {/* Price */}
+            <InputForm
+              control={form.control}
+              formLabel="Price"
+              name="price"
+            />
+            {/* QTY */}
+            <InputForm
+              control={form.control}
+              formLabel="QTY"
+              name="qty"
+            />
+            {/* Description */}
+            <TextareaForm
+              control={form.control}
+              formLabel="Description"
+              name="description"
+              className={cn("sm:col-span-2 md:col-span-3 col-span-1")}
             />
           </div>
+
+
           <Button disabled={loading} className="ml-auto" type="submit">
             Save Changed
           </Button>
