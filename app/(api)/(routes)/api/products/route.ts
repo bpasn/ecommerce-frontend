@@ -1,13 +1,14 @@
 import { authOption } from "@/lib/nextAuthOption";
 import { formSchema } from "@/request/product-form-validate";
 import AxiosService from "@/services/axiosService";
-import ProductService from "@/services/product.service";
+import ProductService from "@/services/product/product.service";
 import { Products } from "@prisma/client";
 import { type NextRequest, NextResponse } from "next/server";
+
 export const GET = async (req: NextRequest) => {
     const sProduct: ProductService = new ProductService(AxiosService.getInstance());
     const payload = await sProduct.getProduct();
-    return NextResponse.json<IResponseBase<Products[]>>(
+    return NextResponse.json<IResponseBase<IProductModel[]>>(
         {
             success: true,
             method: req.method,

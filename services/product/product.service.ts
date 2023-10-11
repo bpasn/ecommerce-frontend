@@ -1,7 +1,7 @@
 import { ProductFormValues } from "@/app/(pages)/admin/products/components/product-form";
-import AxiosService from "./axiosService";
+import AxiosService from "../axiosService";
 import prismadb from "@/lib/prismadb.util";
-import { IProductService } from "@/interfaces/product";
+import { IFindByName, IProductService } from "@/services/product/product";
 import { getServerSession } from "next-auth";
 import { authOption } from "@/lib/nextAuthOption";
 import { Products } from "@prisma/client";
@@ -10,6 +10,27 @@ export default class ProductService implements IProductService {
     private sAxios: AxiosService;
     constructor(sAxios: AxiosService) {
         this.sAxios = sAxios;
+    }
+    async findByName(productName: string): Promise<IFindByName[]> {
+        const products = await prismadb.products.findMany({
+            where: {
+                productName: {
+                    startsWith: productName
+                }
+            },
+            select: {
+                productName: true,
+                id: true
+            }
+        });
+
+        const mapperField: IFindByName[] = products.map(product => ({
+            label: product.productName,
+            value: product.id
+        }));
+
+        return mapperField;
+
     }
 
 
@@ -22,7 +43,7 @@ export default class ProductService implements IProductService {
             }
         });
         const formatProducts: IProductModel[] = products.map((product) => {
-            console.log()
+            console.log();
             return ({
                 id: product.id,
                 name: product.productName,

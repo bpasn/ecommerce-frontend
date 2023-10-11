@@ -1,6 +1,6 @@
 import { formSchema } from "@/request/product-form-validate";
 import AxiosService from "@/services/axiosService";
-import ProductService from "@/services/product.service";
+import ProductService from "@/services/product/product.service";
 import { NextResponse, type NextRequest } from "next/server";
 const sProduct: ProductService = new ProductService(AxiosService.getInstance());
 

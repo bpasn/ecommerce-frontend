@@ -76,6 +76,10 @@ module.exports = {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",
         },
+        // ".popover-content-width-same-as-its-trigger": {
+        //   width: "var(--radix-popover-trigger-width)",
+        //   "max-height": "var(--radix-popover-content-available-height)",
+        // },
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
