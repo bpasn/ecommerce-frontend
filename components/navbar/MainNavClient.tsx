@@ -18,17 +18,28 @@ const MainNavClient: React.FC<MainNavClientProps> = ({
 
     const routes = [
         {
-            href: `/admin/${params.storeId}/categories`,
+            href: `/`,
+            label: "Home",
+            active: pathname === `/`
+        },
+        {
+            href: `#`,
             label: "Categories",
-            active: pathname === `/admin/${params.storeId}/categories`
+            active: pathname === `/categories`
+        },
+        {
+            href: `#`,
+            label: "Products",
+            active: pathname === `/products`
         },
     ];
+
     return (
         <nav className={cn("flex items-center space-x4 lg:space-x-6", className)}>
             {routes.map(route => (
                 <Link
                     href={route.href}
-                    key={route.href}
+                    key={route.label}
                     className={cn("text-md font-medium mr-2 transition-colors hover:text-primary", route.active ? "text-black dark:text-white" : "text-muted-foreground")}>
                     {route.label}
                 </Link>

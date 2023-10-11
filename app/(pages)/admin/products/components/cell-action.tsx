@@ -19,7 +19,6 @@ export const CellAction: React.FC<CellProps> = ({
     data
 }) => {
     const router = useRouter();
-    const params = useParams();
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const onCopy = (id: string) => {
@@ -30,7 +29,7 @@ export const CellAction: React.FC<CellProps> = ({
     const onDelete = async () => {
         setLoading(true);
         try {
-            await axios.delete(`/api/categories/${data.id}`);
+            await axios.delete(`/api/products/${data.id}`);
             window.location.reload();
         } catch (error:any) {
             if (axios.isAxiosError(error)) {
@@ -69,7 +68,7 @@ export const CellAction: React.FC<CellProps> = ({
                         Copy Id
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => {
-                        router.push(`/admin/categories/${data.id}`);
+                        router.push(`/admin/products/${data.id}`);
                     }}>
                         <Edit className="mr-2 h4 w-4" />
                         Update

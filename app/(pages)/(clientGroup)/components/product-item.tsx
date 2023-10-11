@@ -28,9 +28,9 @@ const ProductItem: React.FC<ProductItemProps> = ({
                 </div>
             </div>
             <hr />
-            <div className='px-4 py-3 flex flex-col gap-1'>
+            <div className='px-4 py-3 flex flex-col gap-1 h-[150px]'>
                 <p className='text-xs text-gray-500 tracking-wide'>{product.category}</p>
-                <p className='text-base font-medium'>{product.title}</p>
+                {/* <p className='text-base font-medium'>{product.title}</p> */}
                 <p className='flex items-center gap-2'>
                     <span className='text-sm line-through'>
                         <FormatDigitToUsd amount={product.oldPrice} />
@@ -39,13 +39,19 @@ const ProductItem: React.FC<ProductItemProps> = ({
                         <FormatDigitToUsd amount={+product.price} />
                     </span>
                 </p>
-                <p className='text-xs text-gray-600 text-justify'>{product.description}</p>
-                <button
-                    onClick={() =>  dispatch(addToCart(product))}
-                    className="h-10 font-medium bg-amazon_blue text-white rounded-md hover:bg-amazon_yellow hover:text-black duration-300 mt-2 md:hidden sm:block">
-                    add to cart
-                </button>
+                <p className='text-xs text-gray-600 text-justify'>
+                    {
+                        product.description.length > 120
+                            ? product.description.substring(0, 100) + "..."
+                            : product.description
+                    }
+                </p>
             </div>
+            <button
+                onClick={() => dispatch(addToCart(product))}
+                className="h-10 w-full font-medium bg-amazon_blue text-white rounded-md hover:bg-amazon_yellow hover:text-black duration-300 mt-2">
+                add to cart
+            </button>
         </div>
     );
 };

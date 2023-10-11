@@ -6,6 +6,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -21,19 +22,10 @@ import { useParams } from "next/navigation";
 import { cn, wait } from "@/lib/utils";
 import { InputForm, OptionSelect, SelectField, TextareaForm } from "@/components/input-form";
 import { ImageUpload } from "@/components/ui/image-upload";
+import { formSchema } from "@/request/product-form-validate";
+import toast from "react-hot-toast";
 
-const formSchema = z.object({
-  productName: z.string().min(1),
-  categoryId: z.string().min(1),
-  price: z.coerce.number().min(1),
-  qty: z.string().min(1),
-  sku: z.string(),
-  description: z.string().nullable(),
-  images: z.object({
-    image: z.string()
-  }).array()
 
-});
 
 export type ProductFormValues = z.infer<typeof formSchema>;
 interface ProductFormProp {
@@ -51,6 +43,7 @@ const ProductForm: React.FC<ProductFormProp> = ({
   categoryOption
 }) => {
   const params = useParams();
+  console.log(params);
   const [loading, setLoading] = useState(false);
   const storeAlert = useStoreAlert();
 
@@ -59,35 +52,42 @@ const ProductForm: React.FC<ProductFormProp> = ({
     defaultValues: initialState ? {
       ...initialState,
       price: parseFloat(String(initialState.price)),
-      qty: initialState.qty.toString()
+      images: localStorage.getItem("images") ? JSON.parse(localStorage.getItem("images")!) : initialState.images,
     }
       : {
         productName: "",
         categoryId: "",
         description: "",
-        price: Number(parseFloat(String(0)).toFixed(2)),
-        qty: "0",
+        price: Number(parseFloat(String(0.00)).toFixed(2)),
+        qty: 0,
         sku: "",
         images: []
 
       }
   });
   const onSubmit = async (data: ProductFormValues) => {
-    storeAlert.onHide();
     setLoading(true);
     try {
       let response;
       if (!initialState) {
         response = await axios.post<IResponse>("/api/products", data);
       } else {
-        response = await axios.patch<IResponse>(`/api/products/${params.ProductId}`, data);
+        response = await axios.patch<IResponse>(`/api/products/${params.productId}`, data);
       }
-      storeAlert.onShow("success", response.data.message);
-    } catch (error: any) {
-      storeAlert.onShow("error", error.message);
-    } finally {
+      toast.success("success", response.data.message);
       await wait(1.5 * 1000);
       window.location.href = "/admin/products";
+    } catch (error: any) {
+      setLoading(false);
+      if (axios.isAxiosError(error)) {
+        console.log(error.response);
+        toast.error(error.response?.data.message);
+        return;
+      }
+      toast.error(error.message);
+    } finally {
+      localStorage.removeItem("images");
+      localStorage.removeItem("uuid");
     }
   };
   const title = initialState ? "Edit Product" : "Create Product";
@@ -121,6 +121,7 @@ const ProductForm: React.FC<ProductFormProp> = ({
                       onRemove={(image) => field.onChange(field.value.filter(img => img.image != image))}
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               );
             }}

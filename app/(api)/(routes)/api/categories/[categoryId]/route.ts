@@ -5,7 +5,7 @@ export async function PATCH(
     req: Request,
     { params }: { params: { categoryId: string; }; }) {
     const body = await req.json();
-    await prismadb.category.update({
+    const cate = await prismadb.category.update({
         where: {
             id: params.categoryId
         },
@@ -15,7 +15,6 @@ export async function PATCH(
     });
     return NextResponse.json<IResponse>({
         message: "Update categories successfully.",
-        method: req.method,
         success: true
     });
 }

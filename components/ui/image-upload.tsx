@@ -26,7 +26,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
     const [urlImageRemove, setUrlImageRemove] = React.useState<string>();
     const inputFileRef = React.useRef<HTMLInputElement>(null);
     const buttonRef = React.useRef<HTMLButtonElement>(null);
-    const uuid = uuidv4();
+    
     React.useEffect(() => {
         setIsMounted(true);
     }, []);
@@ -38,9 +38,12 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
         setLoading(true);
         for (let i = 0; i < files?.length; i++) {
             const file = files[i];
-            uploadImageToFirebase(`images/products/${uuid}/${file?.name}`, file!)
+            uploadImageToFirebase(`images/products/${file?.name}`, file!)
                 .then(res => {
                     onChange(res);
+                    const images = localStorage.getItem("images") ? JSON.parse(localStorage.getItem("images")!) : [];
+                    images.push({ image: res });
+                    localStorage.setItem("images",JSON.stringify(images));
                 })
                 .catch(e => { throw e; })
                 .finally(() => {
@@ -55,7 +58,10 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
             setAlertModal(!alertModal);
         }).catch((e: any) => toast.error(e.message));
         onRemove(urlImageRemove!);
+        const images:[] = localStorage.getItem("images") ? JSON.parse(localStorage.getItem("images")!) : [];
+        localStorage.setItem("images",JSON.stringify(images.filter(img => img !== urlImageRemove)));
         setUrlImageRemove("");
+        
     };
     return (
         <div>
@@ -63,7 +69,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
             <AlertModal isOpen={alertModal}
                 onClose={() => setAlertModal(false)}
                 onConfirm={() => {
-                    removeImage()
+                    removeImage();
                 }}
                 loading={loading} />
             <div className="mb-4 flex flex-row items-center gap-4">
@@ -80,8 +86,8 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
                                 type="button"
                                 ref={buttonRef}
                                 onClick={() => {
-                                   setAlertModal(true);
-                                   setUrlImageRemove(url);
+                                    setAlertModal(true);
+                                    setUrlImageRemove(url);
                                 }}
                                 variant={"danger"}
                                 size={"icon"}>

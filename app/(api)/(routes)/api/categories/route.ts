@@ -15,7 +15,6 @@ export async function POST(req: Request) {
     if (!validateSchema.success) {
         return NextResponse.json<IResponse>({
             message: validateSchema.error.toString(),
-            method: req.method,
             success: false
         }, { status: 400 });
     }
@@ -26,7 +25,6 @@ export async function POST(req: Request) {
     });
     return NextResponse.json<IResponse>({
         message: "Create categories success",
-        method: req.method,
         success: true
     });
 }
@@ -40,7 +38,6 @@ export async function PATCH(req: Request) {
     });
     return NextResponse.json<IResponse>({
         message: "Update categories success",
-        method: req.method,
         success: true
     });
 }

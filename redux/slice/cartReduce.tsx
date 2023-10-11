@@ -23,15 +23,16 @@ const cartSlice = createSlice({
     name: "cart",
     initialState,
     reducers: {
-        addToCart: (s, a: PayloadAction<ICartItem>) => {
+        addToCart: (state, a: PayloadAction<ICartItem>) => {
             const newItem = a.payload;
-            const existing = s.cartItem.find(itm => itm.id === a.payload.id);
+            const existing = state.cartItem.find(itm => itm.id === a.payload.id);
             const cartItem = existing
-                ? s.cartItem.map(itm => itm.id === existing.id
+                ? state.cartItem.map(itm => itm.id === existing.id
                     ? { ...newItem, quantity: itm.quantity + newItem.quantity }
                     : itm)
-                : [...s.cartItem, newItem];
-            return { ...s, cartItem };
+                : [...state.cartItem, newItem];
+                console.log(cartItem)
+            return { ...state, cartItem };
         },
         increaseQuantity: (state, action) => {
             const existing = state.cartItem.find(item => item.id === action.payload.id);

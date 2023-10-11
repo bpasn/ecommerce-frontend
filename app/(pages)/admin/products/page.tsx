@@ -1,4 +1,4 @@
-import  { format } from 'date-fns';
+import { format } from 'date-fns';
 import React from 'react';
 import ProductClient from './components/client';
 import prismadb from '@/lib/prismadb.util';
@@ -8,21 +8,28 @@ import { Products } from '@prisma/client';
 interface ProductPageProps {
   params: {
     storeId: string;
-  }
+  };
 }
 
 const ProductPage: React.FC<ProductPageProps> = async ({
   params
 }) => {
-  const Products: Products[] = await prismadb.products.findMany({
+  const Products = await prismadb.products.findMany({
+    include: {
+      category: true
+    },
     orderBy: {
       createdAt: "desc"
     }
   });
 
-  const formattedProducts: ProductColumns[] = Products.map((item: Products) => ({
+  const formattedProducts: ProductColumns[] = Products.map((item) => ({
     id: item.id as string,
-    name: item.productName,
+    productName: item.productName,
+    categoryName: item.category.name,
+    price: String(item.price.toFixed(2)),
+    qty: String(item.qty),
+    description: item.description!.length > 100 ? item.description!.substring(0, 70) + "..." : item.description!,
     createdAt: format(item.createdAt, "MMM do, yyyy")
   }));
 
@@ -32,7 +39,7 @@ const ProductPage: React.FC<ProductPageProps> = async ({
         <ProductClient data={formattedProducts} />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ProductPage
+export default ProductPage;

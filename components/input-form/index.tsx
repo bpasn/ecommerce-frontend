@@ -1,6 +1,7 @@
 "use client";
 import {
     Control,
+    ControllerRenderProps,
     FieldPath,
     FieldValues
 } from "react-hook-form";
@@ -21,6 +22,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
+import { ChangeEventHandler } from "react";
 
 
 export declare type UseControllerProps<
@@ -29,12 +31,13 @@ export declare type UseControllerProps<
 > = {
     name: TName,
     control?: Control<TFieldValues>,
+
 };
 interface InputFormProps<T extends FieldValues> extends UseControllerProps<T> {
     formLabel: string;
     disabled?: boolean;
     placeholder?: string;
-    onChange?: React.ChangeEventHandler<HTMLInputElement>
+    onChange?:ChangeEventHandler<HTMLInputElement>
 }
 export function InputForm<T extends FieldValues>({
     formLabel,
@@ -43,6 +46,7 @@ export function InputForm<T extends FieldValues>({
     disabled = false,
     placeholder = "Please enter your " + name,
     onChange
+    
 }: InputFormProps<T>) {
     return (
         <FormField
@@ -52,7 +56,7 @@ export function InputForm<T extends FieldValues>({
                 <FormItem>
                     <FormLabel>{formLabel}</FormLabel>
                     <FormControl>
-                        <Input disabled={disabled} placeholder={placeholder} {...field} />
+                        <Input {...field} onChange={(e) => field.onChange(e)} disabled={disabled} placeholder={placeholder}  />
                     </FormControl>
                     <FormMessage />
                 </FormItem>

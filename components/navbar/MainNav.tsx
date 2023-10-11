@@ -17,11 +17,11 @@ const MainNav: React.FC<MainNavProps> = ({
     const params = useParams();
 
     const routes = [
-        // {
-        //     href: `/admin/billboards`,
-        //     label: "Billboard",
-        //     active: pathname === `/admin/billboards`
-        // },
+        {
+            href: `/`,
+            label: "Home",
+            active: pathname === `/`
+        },
         {
             href: `/admin/categories`,
             label: "Categories",
@@ -31,6 +31,11 @@ const MainNav: React.FC<MainNavProps> = ({
             href: `/admin/products`,
             label: "Products",
             active: pathname === `/admin/products`
+        },
+        {
+            href: `/admin/orders`,
+            label: "Orders",
+            active: pathname === `/admin/orders`
         },
     ];
     return (

@@ -5,15 +5,15 @@ import { Separator } from '@/components/ui/separator';
 import { Plus } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
 import React from 'react';
-import { columns, BillboardColumns } from './columns';
+import { columns, OrderColumns } from './columns';
 import Heading from '@/components/ui/heading';
 import ApiList from './api-list';
 
-interface BillboardClientProps {
-    data: BillboardColumns[];
+interface OrdersClientProps {
+    data: OrderColumns[];
 }
 
-const BillboardClient: React.FC<BillboardClientProps> = ({
+const OrdersClient: React.FC<OrdersClientProps> = ({
     data
 }) => {
     const router = useRouter();
@@ -23,27 +23,23 @@ const BillboardClient: React.FC<BillboardClientProps> = ({
         <>
             <div className="flex items-center justify-between">
                 <Heading
-                    title={`Billboards(${data.length})`}
-                    description='Billboards'
+                    title={`Orders(${data.length})`}
+                    description='Orderss'
                 />
-                <Button onClick={() => router.push(`/admin/billboards/new`)}>
-                    <Plus className="mr-2 h-4 w-4" />
-                    Add New
-                </Button>
             </div>
             <Separator />
             <DataTable columns={columns} data={data} searchKey='label' />
             <Separator />
             <Heading
                 title='Api'
-                description='API calls for Billboard'
+                description='API calls for Orders'
             />
             <ApiList
-                entityName={'Billboards'}
-                entityIdName={"billboardId"}
+                entityName={'Orders'}
+                entityIdName={"OrdersId"}
             />
         </>
     );
 };
 
-export default BillboardClient;
+export default OrdersClient;

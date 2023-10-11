@@ -5,10 +5,14 @@ import Image from 'next/image'
 import Logo from "@/assets/logo.png";
 import CartImage from "@/assets/cartIcon.png";
 import { HiOutlineSearch } from 'react-icons/hi';
-import { BiCaretDown } from 'react-icons/bi';
+import { useAppSelector } from '@/hooks/useReduxHook';
+import { cartSelect } from '@/redux/slice/cartReduce';
+// import { BiCaretDown } from 'react-icons/bi';
 type HeaderProps = {}
 
 function Header({ }: HeaderProps) {
+    const {cartItem} = useAppSelector(cartSelect)
+
     return (
         <div className="w-full h-20 bg-amazon_blue text-white stick top-0 z-50">
             <div className="h-full w-full mx-auto inline-flex items-center justify-between gap-1 mdl:-grap-3 px-4">
@@ -51,7 +55,7 @@ function Header({ }: HeaderProps) {
                         alt='cartImage' />
                     <p className=' text-xs text-white font-bold mt-3'> Cart</p>
                     <span className="absolute text-amazon_yellow text-xs top-2 left-[29px] font-semibold">
-                        0
+                        {cartItem.length}
                     </span>
                 </Link>
             </div>

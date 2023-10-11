@@ -1,8 +1,6 @@
 import { authOption } from "@/lib/nextAuthOption";
-import axios, { Axios, AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 import { getServerSession } from "next-auth";
-import type { NextRequest } from "next/server";
-import { getSession } from "next-auth/react";
 // we called this is a singleton;
 export default class AxiosService {
     private static _instance: AxiosService;
@@ -20,19 +18,19 @@ export default class AxiosService {
     static getInstance(): AxiosService {
         if (!AxiosService._instance) {
             AxiosService._instance = new AxiosService();
+
         }
         return AxiosService._instance;
     }
     async setToken() {
         let auth: string | undefined = this.axiosInstance.defaults.headers.common['Authorization']?.toString();
-        if (!auth){
-            const session = await getServerSession(authOption());
-            console.log("session -> ",{session})
+        if (!auth) {
+            let session = await getServerSession(authOption());
             this.axiosInstance.defaults.headers.common['Authorization'] = session?.user?.accessToken;
         }
     }
-    refreshToken(oldToken:string){
-        let newToken:string = "";
+    refreshToken(oldToken: string) {
+        let newToken: string = "";
         // todo: logic refreshToken
         return newToken;
     }

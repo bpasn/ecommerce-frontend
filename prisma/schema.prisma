@@ -6,27 +6,25 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
   relationMode = "prisma"
 }
 
-
 model Store {
-  id        String @id @default(uuid())
-  name      String @unique
+  id        String      @id @default(uuid())
+  name      String      @unique
   user      String?
   // category  Category[] @relation("StoreToCategory")
   billboard Billboard[] @relation("StoreToBillboard")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
 }
 
-
 model Billboard {
-  id        String @id @default(uuid())
-  storeId   String 
-  store     Store @relation("StoreToBillboard",fields:[storeId],references:[id])
+  id        String   @id @default(uuid())
+  storeId   String
+  store     Store    @relation("StoreToBillboard", fields: [storeId], references: [id])
   label     String
   imageUrl  String
   // categories  Category[]
@@ -37,43 +35,66 @@ model Billboard {
 }
 
 model Category {
-  id          String    @id @default(uuid())
+  id        String     @id @default(uuid())
   // storeId     String
   // store       Store @relation("StoreToCategory",fields: [storeId],references: [id])
   // billboardId String
-  product     Products[] @relation("CategoryToProduct")
-  name        String 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  product   Products[] @relation("CategoryToProduct")
+  name      String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
 
   // @@index([storeId])
   // @@index([billboardId])
 }
 
 model Products {
-  id            String           @id @default(uuid())
-  categoryId    String
-  category      Category         @relation("CategoryToProduct",fields: [categoryId],references: [id])
-  productName 	String  @unique
-  description   String?
-  images         ImageProduct[]
-  price         Decimal
-  qty           Int
-  sku           String
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  
+  id          String         @id @default(uuid())
+  categoryId  String
+  category    Category       @relation("CategoryToProduct", fields: [categoryId], references: [id])
+  productName String         @unique
+  description String?        @db.Text
+  images      ImageProduct[]
+  orderItem   OrderItem[]
+  price       Decimal
+  qty         Int
+  sku         String
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
 
   @@index([categoryId])
 }
 
 model ImageProduct {
-  id            String @id @default(uuid())
-  productId 		String 
-  image         String
-  product       Products @relation(fields: [productId],references: [id],onDelete: Cascade) 
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id        String   @id @default(uuid())
+  productId String
+  image     String   @db.VarChar(256)
+  product   Products @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([productId])
+}
+
+model Orders {
+  id        String      @id @default(uuid())
+  orderItem OrderItem[]
+  isPain    Boolean     @default(false)
+  phone     String      @default("")
+  address   String      @default("")
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+}
+
+model OrderItem {
+  id        String   @id @default(uuid())
+  ordersId  String
+  order     Orders   @relation(fields: [ordersId], references: [id])
+  productId String
+  product   Products @relation(fields: [productId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([productId])
+  @@index([ordersId])
 }

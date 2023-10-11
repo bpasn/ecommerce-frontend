@@ -5,14 +5,34 @@ import { CellAction } from './cell-action';
 
 export interface ProductColumns {
     id: string;
-    name: string;
+    productName: string;
+    categoryName: string;
+    price: string;
+    qty: string;
+    description:string;
     createdAt: string;
 }
 
 export const columns: ColumnDef<ProductColumns>[] = [
     {
-        accessorKey: "name",
-        header: "name"
+        accessorKey: "productName",
+        header: "Product Name"
+    },
+    {
+        accessorKey: "categoryName",
+        header: "Category Name"
+    },
+    {
+        accessorKey: "price",
+        header: "Price"
+    },
+    {
+        accessorKey: "qty",
+        header: "QTY"
+    },
+    {
+        accessorKey: "description",
+        header: "Description"
     },
     {
         accessorKey: "createdAt",

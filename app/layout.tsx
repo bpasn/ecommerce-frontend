@@ -17,6 +17,7 @@ const RootLayout = async ({
 
       <html lang="en">
         <body>
+          <script src="../path/to/flowbite/dist/flowbite.min.js"></script>
           <ReduxStoreProvider>
             <ToastProvider />
             <ModalProvider />

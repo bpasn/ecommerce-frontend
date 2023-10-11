@@ -5,7 +5,7 @@ const FormatDigitToUsd = (props: { amount:number }) => {
         "es-US",
         {
             style: "currency",
-            currency: "USD",
+            currency: "THB",
             minimumFractionDigits: 2
         }
     )
