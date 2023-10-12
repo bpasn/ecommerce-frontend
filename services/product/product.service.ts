@@ -43,7 +43,6 @@ export default class ProductService implements IProductService {
             }
         });
         const formatProducts: IProductModel[] = products.map((product) => {
-            console.log();
             return ({
                 id: product.id,
                 name: product.productName,
@@ -52,8 +51,7 @@ export default class ProductService implements IProductService {
                 description: product.description!,
                 image: product.images[0].image,
                 price: String(Number(product.price)),
-                quantity: product.qty,
-
+                qty: product.qty
             });
         });
         return formatProducts;

@@ -5,7 +5,7 @@ import { Separator } from '@/components/ui/separator';
 import { Plus } from 'lucide-react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import React, { useState } from 'react';
-import { columns, CategoryColumns } from './columns';
+import { columns, CategoryColumns } from './category-columns';
 import Heading from '@/components/ui/heading';
 import ApiList from './api-list';
 import { useStoreModal } from '@/hooks/useStoreModel';

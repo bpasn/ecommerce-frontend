@@ -1,7 +1,7 @@
 "use client";
 
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { ProductColumns } from "./columns";
+import { ProductColumns } from "./product-columns";
 import { Button } from "@/components/ui/button";
 import { Copy, Edit, MoreHorizontal, Trash } from "lucide-react";
 import toast from "react-hot-toast";
@@ -31,10 +31,10 @@ export const CellAction: React.FC<CellProps> = ({
         try {
             await axios.delete(`/api/products/${data.id}`);
             window.location.reload();
-        } catch (error:any) {
+        } catch (error: any) {
             if (axios.isAxiosError(error)) {
                 toast.error(error.response?.data.message);
-            }else{
+            } else {
                 toast.error(error.message)
             }
         } finally {

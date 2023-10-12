@@ -20,6 +20,7 @@ import {
     TableRow
 } from "@/components/ui/table";
 import { useState } from 'react';
+import { cn } from '@/lib/utils';
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
@@ -64,16 +65,23 @@ export function DataTable<TData, TValue>({
                     <TableHeader>
                         {table.getHeaderGroups().map(headerGroup => (
                             <TableRow key={headerGroup.id}>
-                                {headerGroup.headers.map(header => (
-                                    <TableHead key={header.id}>
-                                        {header.isPlaceholder
-                                            ? null
-                                            : flexRender(
-                                                header.column.columnDef.header,
-                                                header.getContext()
-                                            )}
-                                    </TableHead>
-                                ))}
+                                {headerGroup.headers.map(header => {
+                                    if(header.id === "productName"){
+                                        console.log(header)
+                                    }
+                                    return (
+                                        <TableHead key={header.id} className={cn(
+                                            `w-[${header.getSize()}px]`
+                                        )} >
+                                            {header.isPlaceholder
+                                                ? null
+                                                : flexRender(
+                                                    header.column.columnDef.header,
+                                                    header.getContext()
+                                                )}
+                                        </TableHead>
+                                    )
+                                })}
                             </TableRow>
                         ))}
                     </TableHeader>

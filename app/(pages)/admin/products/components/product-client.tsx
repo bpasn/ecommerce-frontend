@@ -3,9 +3,9 @@ import { Button } from '@/components/ui/button';
 import { DataTable } from '@/components/ui/data-table';
 import { Separator } from '@/components/ui/separator';
 import { Plus } from 'lucide-react';
-import {  useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import React from 'react';
-import { columns, ProductColumns } from './columns';
+import { columns, ProductColumns } from './product-columns';
 import Heading from '@/components/ui/heading';
 
 interface ProductClientProps {
@@ -29,22 +29,7 @@ const ProductClient: React.FC<ProductClientProps> = ({
                 </Button>
             </div>
             <Separator />
-            <DataTable columns={columns} data={data} searchKey='name' />
-
-            {/* <Separator />
-            <Heading
-                title='Api'
-                description='API calls for Product'
-            />
-             {
-                data.map(item => (
-                    <ApiList
-                    key={item.id}
-                        entityName={'Categories'}
-                        entityIdName={"ProductId"}
-                    />
-                ))
-            } */}
+            <DataTable columns={columns} data={data} searchKey='productName' />
         </>
     );
 };

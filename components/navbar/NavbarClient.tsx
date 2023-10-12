@@ -26,10 +26,10 @@ const NavbarClient = (props: Props) => {
         <div className="border-b">
             <div className="flex h-16 items-center px-4">
                 <MainNavClient className='mx-6 hidden md:block' />
-                <StoreSwitcherApi
+                {/* <StoreSwitcherApi
                     className={cn("hidden md:flex")}
                     placeholderSearch='Search Product'
-                    heading={'Search product'} />
+                    heading={'Search product'} /> */}
 
                 {/* NAV BAR MOBILE */}
                 <Sidebar />
@@ -42,7 +42,10 @@ const NavbarClient = (props: Props) => {
                     >
                         <ShoppingCartIcon />
                         <Badge className='absolute -top-3 left-4 rounded-full border-transparent' variant={"outline"}>
-                            {cartItem.length}
+                            {cartItem.reduce((
+                                quantity:number,
+                                item
+                            ) => quantity + item.quantity,0)}
                         </Badge>
                     </Link>
                     {/* dropdown */}

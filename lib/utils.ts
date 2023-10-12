@@ -9,7 +9,7 @@ export function cn(...inputs: ClassValue[]) {
 export const wait = (duration: number):Promise<void> => {
   return new Promise(resolve => setTimeout(resolve, duration));
 }
-export const formatter = new Intl.NumberFormat('en-US', {
+export const formatter = new Intl.NumberFormat('th-TH', {
   style: 'currency',
-  currency: 'USD',
+  currency: 'THB',
 });

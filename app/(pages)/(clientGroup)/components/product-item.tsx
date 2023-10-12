@@ -1,7 +1,8 @@
 'use client';
 import FormatDigitToUsd from '@/components/store-format-digit';
+import { Button } from '@/components/ui/button';
 import { useAppDispatch } from '@/hooks/useReduxHook';
-import { addToCart } from '@/redux/slice/cartReduce';
+import { ICartItem, addToCart } from '@/redux/slice/cartReduce';
 import { Heart, ShoppingCart } from 'lucide-react';
 import Image from 'next/image';
 import React from 'react';
@@ -17,14 +18,11 @@ const ProductItem: React.FC<ProductItemProps> = ({
     return (
         <div className='w-full bg-white text-black p-4 border border-gray-300 rounded-lg group overflow-hidden'>
             <div className='w-full h-[260px] relative'>
-                <Image className='w-full h-full object-cover scale-90 hover:scale-100 transition-transform duration-300' width={300} height={300} src={product.image} alt='imageProduct' />
-                <div className='w-12 h-24 absolute bottom-10 right-0 border-[1px] border-gray-400 bg-white rounded-md flex flex-col translate-x-20 group-hover:translate-x-0 transition-transform duration-300'>
-                    <span onClick={() => dispatch(addToCart(product))} className='w-full h-full border-b-[1px] border-gray-400 bg-white  flex-col flex items-center justify-center text-xl bg-transparent hover:bg-amazon_yellow cursor-pointer duration-300'>
+                <Image className='h-full object-contain transition-transform duration-300 scale-90 hover:scale-100 ' width={300} height={300} src={product.image} alt='imageProduct' />
+                <div className='w-12 h-12 absolute bottom-10 right-0  bg-gray-300 rounded-md flex flex-col translate-x-20 group-hover:translate-x-0 transition-transform duration-300'>
+                    <Button variant={'outline'} size={"icon"} onClick={() => dispatch(addToCart({ ...product, quantity: 1 }))} className='w-full h-full  flex-col flex items-center justify-center text-xl bg-transparent cursor-pointer duration-300'>
                         <ShoppingCart />
-                    </span>
-                    {/* <span onClick={() => { }} className='w-full h-full border-b-[1px] border-gray-400 bg-white  flex-col flex items-center justify-center text-xl bg-transparent hover:bg-amazon_yellow cursor-pointer duration-300'>
-                        <Heart />
-                    </span> */}
+                    </Button>
                 </div>
             </div>
             <hr />
@@ -48,7 +46,7 @@ const ProductItem: React.FC<ProductItemProps> = ({
                 </p>
             </div>
             <button
-                onClick={() => dispatch(addToCart(product))}
+                onClick={() => dispatch(addToCart({ ...product, quantity: 1 }))}
                 className="h-10 w-full font-medium bg-amazon_blue text-white rounded-md hover:bg-amazon_yellow hover:text-black duration-300 mt-2">
                 add to cart
             </button>

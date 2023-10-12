@@ -2,7 +2,7 @@ import dateFns, { format } from 'date-fns';
 import React, { useState } from 'react';
 import CategoryClient from './components/client';
 import prismadb from '@/lib/prismadb.util';
-import { CategoryColumns } from './components/columns';
+import { CategoryColumns } from './components/category-columns';
 import { Category } from '@prisma/client';
 import StoreModalForm from '@/components/modals/store-modal-forms';
 import CategoryForm, { CategoryFormValues } from './components/category-form';

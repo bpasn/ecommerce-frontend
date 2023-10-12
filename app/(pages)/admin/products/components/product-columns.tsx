@@ -1,7 +1,8 @@
 "use client";
 
-import { ColumnDef } from '@tanstack/react-table';
-import { CellAction } from './cell-action';
+import { ColumnDef, RowData } from '@tanstack/react-table';
+import { CellAction } from './product-cell-action';
+
 
 export interface ProductColumns {
     id: string;
@@ -9,22 +10,25 @@ export interface ProductColumns {
     categoryName: string;
     price: string;
     qty: string;
-    description:string;
+    description: string;
     createdAt: string;
 }
 
 export const columns: ColumnDef<ProductColumns>[] = [
     {
         accessorKey: "productName",
-        header: "Product Name"
+        header: "Product Name",
+        size: 170
     },
     {
         accessorKey: "categoryName",
-        header: "Category Name"
+        header: "Category Name",
+        size: 200
+
     },
     {
         accessorKey: "price",
-        header: "Price"
+        header: "Price",
     },
     {
         accessorKey: "qty",
@@ -32,7 +36,8 @@ export const columns: ColumnDef<ProductColumns>[] = [
     },
     {
         accessorKey: "description",
-        header: "Description"
+        header: "Description",
+        size:250
     },
     {
         accessorKey: "createdAt",

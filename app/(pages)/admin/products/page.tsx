@@ -1,8 +1,8 @@
 import { format } from 'date-fns';
 import React from 'react';
-import ProductClient from './components/client';
+import ProductClient from './components/product-client';
 import prismadb from '@/lib/prismadb.util';
-import { ProductColumns } from './components/columns';
+import { ProductColumns } from './components/product-columns';
 import { Products } from '@prisma/client';
 
 interface ProductPageProps {

@@ -24,6 +24,7 @@ import { Alert, AlertDescription, AlertTitle, alertVariants } from "@/components
 import { VariantProps } from "class-variance-authority";
 import { useParams, useRouter } from "next/navigation";
 import { wait } from "@/lib/utils";
+import toast from "react-hot-toast";
 
 const formSchema = z.object({
   name: z.string().min(1),
@@ -62,9 +63,9 @@ const CategoryForm: React.FC<CategoryFormProp> = ({
       } else {
         response = await axios.patch<IResponse>(`/api/categories/${params.categoryId}`, data);
       }
-      storeAlert.onShow("success", response.data.message);
+      toast.success("Create categories success")
     } catch (error: any) {
-      storeAlert.onShow("error", error.message);
+      toast.success("[ ERROR ]: " + error.message)
     } finally {
       await wait(1.5 * 1000);
       window.location.href = "/admin/categories";
@@ -75,12 +76,12 @@ const CategoryForm: React.FC<CategoryFormProp> = ({
   return (
     <>
       <Heading title={title} description={description} />
-      {storeAlert.show && <Alert variant={variantMap[storeAlert.title]} >
+      {/* {storeAlert.show && <Alert variant={variantMap[storeAlert.title]} >
         <AlertTitle>{storeAlert.title}</AlertTitle>
         <AlertDescription>
           {storeAlert.description}
         </AlertDescription>
-      </Alert>}
+      </Alert>} */}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
           <div className="grid grid-cols-1 gap-8">
