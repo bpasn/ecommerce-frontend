@@ -41,22 +41,11 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
         <h1 className="text-xl md:text-3xl tracking-wide font-semibold">
           product.title
         </h1>
-        <ul className='list-disc gap-4'>
-          {
-            desc.map(l => (
-              <li key={l.text} className='text-xs text-gray-600'>{l.text}</li>
-            ))
-          }
-        </ul>
-       
         <div>
           <p className="text-base text-gray-600 flex items-center gap-1">
             Price:
             <span className="text-lg text-amazon_blue font-ssemibold">
               {formatter.format(Number(product.price))}
-            </span>
-            <span className="ml-1 line-through">
-              {formatter.format(Number(product.oldPrice))}
             </span>
           </p>
 
