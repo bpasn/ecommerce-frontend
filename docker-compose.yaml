@@ -1,7 +1,10 @@
 version: "3.9"
 
 services:
+
   database:
+    mem_limit: 256m
+    cpus: 0.0001
     image: mysql
     ports:
       - "3300:3306"

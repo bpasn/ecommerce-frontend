@@ -4,7 +4,7 @@ interface IProductModel {
     category: string;
     oldPrice: number;
     description: string;
-    image: string;
+    images: string[];
     price: string;
     qty: number;
 }

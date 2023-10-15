@@ -21,8 +21,8 @@ const CartItem: React.FC<{
                 <Image
                     src={cartItem.image}
                     alt="cartItemImage"
-                    width={350}
-                    height={350}
+                    width={150}
+                    height={150}
                     className="object-contain h-full"
                 />
                 <div className="flex flex-col">

@@ -49,21 +49,67 @@ model Category {
 }
 
 model Products {
-  id          String         @id @default(uuid())
+  id          String              @id @default(uuid())
   categoryId  String
-  category    Category       @relation("CategoryToProduct", fields: [categoryId], references: [id])
-  productName String         @unique
-  description String?        @db.Text
+  category    Category            @relation("CategoryToProduct", fields: [categoryId], references: [id])
+  productName String              @unique
+  title       String
+  description productDescription?
   images      ImageProduct[]
   orderItem   OrderItem[]
   price       Decimal
   qty         Int
   sku         String
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
 
   @@index([categoryId])
 }
+
+model productDescription {
+  id          String    @id @default(uuid())
+  productId   String    @unique
+  products    Products  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  feature     feature   @relation(fields: [featureId], references: [id])
+  // functions   functions @relation(fields: [functionsId], references: [id])
+  featureId   String    @unique
+  // functionsId String    @unique
+
+  @@index([productId])
+}
+
+model feature {
+  id                 String               @id @default(uuid())
+  title              String
+  lists              listFeature[]
+  productDescription productDescription[]
+}
+
+model listFeature {
+  id        String   @id @default(uuid())
+  text      String   @db.Text
+  feature   feature? @relation(fields: [featureId], references: [id], onDelete: Cascade)
+  featureId String?
+
+  @@index([featureId])
+}
+
+// model functions {
+//   id    String         @id @default(uuid())
+//   text  String         @db.Text
+//   lists listFunction[]
+
+//   productDescription   productDescription[]
+// }
+
+// model listFunction {
+//   id          String     @id @default(uuid())
+//   text        String     @db.Text
+//   functions   functions? @relation(fields: [functionsId], references: [id], onDelete: Cascade)
+//   functionsId String?
+
+//   @@index([functionsId])
+// }
 
 model ImageProduct {
   id        String   @id @default(uuid())
@@ -80,6 +126,7 @@ model Orders {
   id        String      @id @default(uuid())
   orderItem OrderItem[]
   isPain    Boolean     @default(false)
+  total     Decimal
   phone     String      @default("")
   address   String      @default("")
   createdAt DateTime    @default(now())
@@ -89,8 +136,9 @@ model Orders {
 model OrderItem {
   id        String   @id @default(uuid())
   ordersId  String
-  order     Orders   @relation(fields: [ordersId], references: [id])
+  order     Orders   @relation(fields: [ordersId], references: [id], onDelete: Cascade)
   productId String
+  quantity  Int
   product   Products @relation(fields: [productId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

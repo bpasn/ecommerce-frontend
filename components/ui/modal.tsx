@@ -1,5 +1,5 @@
 'use client';
-import React from 'react'
+import React from 'react';
 import {
     Dialog,
     DialogContent,
@@ -15,7 +15,7 @@ interface ModalProps {
     isOpen: boolean;
     onClose: () => void;
     children?: React.ReactNode;
-    size?:"sm" | "md" | "lg"
+    size?: "sm" | "md" | "lg";
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -27,14 +27,13 @@ const Modal: React.FC<ModalProps> = ({
     size = "md"
 }) => {
     const onChange = (open: boolean) => {
-        if (!open) {
-            onClose();
-        }
-    }
+        onClose();
+        document.body.style;
+    };
     return (
         <Dialog open={isOpen} onOpenChange={onChange}>
             <DialogContent style={{
-                width: size==="md" ? "700px": size === "lg" ? "900px" : "300px"
+                width: size === "md" ? "700px" : size === "lg" ? "900px" : "300px"
             }}>
                 <DialogHeader>
                     <DialogTitle>{title}</DialogTitle>
@@ -45,6 +44,6 @@ const Modal: React.FC<ModalProps> = ({
                 <div>{children}</div>
             </DialogContent>
         </Dialog>
-    )
-}
+    );
+};
 export default Modal;

@@ -1,4 +1,3 @@
-'use client';
 const Loading = () => {
     return (
         <div className="bg-white/[.9] bg-opacity-50 fixed flex justify-center items-center top-0 left-0 right-0 z-50 p-4 overflow-x-hidden overflow-y-auto md:inset-0 max-h-full min-h-full">

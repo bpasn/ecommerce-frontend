@@ -4,6 +4,8 @@ import ToastProvider from '@/providers/toast-provider';
 import '../styles/globals.css';
 import { getServerSession } from 'next-auth';
 import ReduxStoreProvider from '@/providers/ReduxStoreProvider';
+import { Suspense } from 'react';
+import Loading from './loading';
 
 const RootLayout = async ({
   children,
@@ -21,7 +23,9 @@ const RootLayout = async ({
           <ReduxStoreProvider>
             <ToastProvider />
             <ModalProvider />
-            {children}
+            <Suspense fallback={<Loading/>}>
+              {children}
+            </Suspense>
           </ReduxStoreProvider>
         </body>
       </html>

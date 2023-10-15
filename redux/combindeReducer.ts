@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 import { PersistConfig, persistReducer } from "redux-persist";
-import cartReduce, { ICartItem, InitialCartItem } from "./slice/cartReduce";
+import cartReduce, { InitialCartItem } from "./slice/cartReduce";
 import storage from "redux-persist/es/storage";
 
  const persisConfig: PersistConfig<any> = {

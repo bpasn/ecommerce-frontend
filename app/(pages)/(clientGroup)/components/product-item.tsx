@@ -2,8 +2,8 @@
 import FormatDigitToUsd from '@/components/store-format-digit';
 import { Button } from '@/components/ui/button';
 import { useAppDispatch } from '@/hooks/useReduxHook';
-import { ICartItem, addToCart } from '@/redux/slice/cartReduce';
-import { Heart, ShoppingCart } from 'lucide-react';
+import { addToCart } from '@/redux/slice/cartReduce';
+import { ShoppingCart } from 'lucide-react';
 import Image from 'next/image';
 import React from 'react';
 
@@ -18,7 +18,7 @@ const ProductItem: React.FC<ProductItemProps> = ({
     return (
         <div className='w-full bg-white text-black p-4 border border-gray-300 rounded-lg group overflow-hidden'>
             <div className='w-full h-[260px] relative'>
-                <Image className='h-full object-contain transition-transform duration-300 scale-90 hover:scale-100 ' width={300} height={300} src={product.image} alt='imageProduct' />
+                <Image className='h-full object-contain transition-transform duration-300 scale-90 hover:scale-100 ' width={300} height={300} src={product.images[0]} alt='imageProduct' />
                 <div className='w-12 h-12 absolute bottom-10 right-0  bg-gray-300 rounded-md flex flex-col translate-x-20 group-hover:translate-x-0 transition-transform duration-300'>
                     <Button variant={'outline'} size={"icon"} onClick={() => dispatch(addToCart({ ...product, quantity: 1 }))} className='w-full h-full  flex-col flex items-center justify-center text-xl bg-transparent cursor-pointer duration-300'>
                         <ShoppingCart />

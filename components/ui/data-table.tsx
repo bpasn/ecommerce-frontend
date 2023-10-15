@@ -20,12 +20,11 @@ import {
     TableRow
 } from "@/components/ui/table";
 import { useState } from 'react';
-import { cn } from '@/lib/utils';
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
     data: TData[];
-    searchKey?: string
+    searchKey?: string;
 };
 
 export function DataTable<TData, TValue>({
@@ -66,13 +65,8 @@ export function DataTable<TData, TValue>({
                         {table.getHeaderGroups().map(headerGroup => (
                             <TableRow key={headerGroup.id}>
                                 {headerGroup.headers.map(header => {
-                                    if(header.id === "productName"){
-                                        console.log(header)
-                                    }
                                     return (
-                                        <TableHead key={header.id} className={cn(
-                                            `w-[${header.getSize()}px]`
-                                        )} >
+                                        <TableHead {...header.getLeafHeaders}  rowSpan={2} key={header.id} >
                                             {header.isPlaceholder
                                                 ? null
                                                 : flexRender(
@@ -80,7 +74,7 @@ export function DataTable<TData, TValue>({
                                                     header.getContext()
                                                 )}
                                         </TableHead>
-                                    )
+                                    );
                                 })}
                             </TableRow>
                         ))}

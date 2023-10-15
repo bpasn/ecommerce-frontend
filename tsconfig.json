@@ -33,11 +33,13 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "app/layout.tsx",
+    // "src/pages",
+    // "src/layout.tsx",
     "middleware.ts",
-    "app/(pages)/layout.tsx.back",
-    "app/(pages)/admin/layout.tsx"
-, "tailwind.config.ts"  ],
+    // "apps/(pages)/layout.tsx.back",
+    // "apps/admin/layout.tsx",
+    "tailwind.config.ts"
+  ],
   "exclude": [
     "node_modules"
   ]

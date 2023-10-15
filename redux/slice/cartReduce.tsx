@@ -23,30 +23,29 @@ const cartSlice = createSlice({
         addToCart: (state, a: PayloadAction<IStoreProduct>) => {
             const newItem = a.payload;
             const existing = state.cartItem.find(itm => itm.id === a.payload.id);
-            console.log({ action: a })
+            console.log({ action: a });
             const cartItem = existing
                 ? state.cartItem.map(itm => itm.id === existing.id
                     ? { ...newItem, quantity: itm.quantity + newItem.quantity }
                     : itm)
                 : [...state.cartItem, newItem];
-            console.log(cartItem)
+            console.log(cartItem);
             return { ...state, cartItem };
         },
-        increaseQuantity: (state, action: PayloadAction<{ id: string }>) => {
+        increaseQuantity: (state, action: PayloadAction<{ id: string; }>) => {
             const existing = state.cartItem.find(item => item.id === action.payload.id);
             existing && existing.quantity++;
         },
-        decreaseQuantity: (state, action: PayloadAction<{ id:string  }>) => {
+        decreaseQuantity: (state, action: PayloadAction<{ id: string; }>) => {
             const existing = state.cartItem.find(item => item.id === action.payload.id);
             existing && existing.quantity--;
         },
-        dropTheCart: (s, a: PayloadAction<{id:string}>) => {
+        dropTheCart: (s, a: PayloadAction<{ id: string; }>) => {
             const updateCart: IStoreProduct[] = s.cartItem.filter(field => field.id !== a.payload.id);
             return { ...s, cartItem: updateCart };
         },
         resetToCart: (s) => {
             s.cartItem = [];
-            return { ...s };
         },
     }
 });

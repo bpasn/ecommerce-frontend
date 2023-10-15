@@ -1,4 +1,4 @@
-import { ProductFormValues } from "@/app/(pages)/admin/products/components/product-form";
+import { ProductFormValues } from "@/app/admin/products/components/product-form";
 
 interface IProductService {
    async getProduct(): Promise<IProductModel[]>;

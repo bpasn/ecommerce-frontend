@@ -12,7 +12,7 @@ const ReduxStoreProvider = ({
             <PersistGate persistor={persistor} loading={null}>
                 {children}
             </PersistGate>
-        </Provider>
+         </Provider>
     );
 };
 
