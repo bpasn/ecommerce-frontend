@@ -1,4 +1,3 @@
-import { authOption } from '@/lib/nextAuthOption';
 import AuthSessionProvider from '@/providers/authProvider';
 import { getServerSession } from 'next-auth';
 import { Suspense } from 'react';

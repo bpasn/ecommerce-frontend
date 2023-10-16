@@ -197,7 +197,9 @@ console.log(valCategory)
               name={"categoryId"}
               onSelectItem={(v: string) => setValCategory(v)}
               options={optionCategory}
-              onInputChange={() => { }}
+              onInputChange={() => {
+                
+              }}
               inputPlaceholder={""} />
             {/* select Sub Category*/}
             <SearchSelectField

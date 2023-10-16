@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
-import { ChangeEventHandler } from "react";
+import { ChangeEventHandler, useEffect, useState } from "react";
 
 
 export declare type UseControllerProps<
@@ -37,7 +37,7 @@ interface InputFormProps<T extends FieldValues> extends UseControllerProps<T> {
     formLabel: string;
     disabled?: boolean;
     placeholder?: string;
-    onChange?: ChangeEventHandler<HTMLInputElement>
+    onChange?: ChangeEventHandler<HTMLInputElement>;
 }
 export function InputForm<T extends FieldValues>({
     formLabel,
@@ -148,6 +148,7 @@ export function SelectField<T extends FieldValues>({
 
 interface SearchSelectFieldProps<T extends FieldValues> extends InputFormProps<T> {
     options: OptionSelect[];
+    routeApi:string;
     onClick?: () => void;
     onInputChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
     inputPlaceholder: string;
@@ -165,6 +166,13 @@ export function SearchSelectField<T extends FieldValues>({
     onClick,
     onSelectItem
 }: SearchSelectFieldProps<T>) {
+    const [inputSearch, setInputSearch] = useState<string>("");
+
+    useEffect(() => {
+        if (inputSearch.length >= 4) {
+
+        }
+    }, [inputSearch]);
     return (
         <FormField
             control={control}
@@ -182,7 +190,7 @@ export function SearchSelectField<T extends FieldValues>({
                         disabled={disabled}
                         onValueChange={(v) => {
                             field.onChange(v);
-                            onSelectItem?.(v)
+                            onSelectItem?.(v);
                         }}
                         defaultValue={field.value}
                         value={field.value}
@@ -200,7 +208,7 @@ export function SearchSelectField<T extends FieldValues>({
                                 <Input placeholder={inputPlaceholder} onChange={onInputChange} />
                             </div>
                             {options.length ? options.map((o: any) => (
-                                <SelectItem 
+                                <SelectItem
                                     key={o.value}
                                     value={o.value}
                                     className="cursor-pointer"
@@ -216,5 +224,5 @@ export function SearchSelectField<T extends FieldValues>({
                 </FormItem>
             )}
         />
-    )
+    );
 }

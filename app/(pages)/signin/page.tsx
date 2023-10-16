@@ -1,7 +1,4 @@
 'use client';
-import { buttonVariants } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
-import Link from 'next/dist/client/link';
 import React from 'react';
 import { UserAuthForm } from './components/sign-form';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -13,7 +10,7 @@ const SigninPage = (props: Props) => {
     const router = useRouter();
     const query = useSearchParams();
     const { data: session } = useSession();
-    const redirect = query.get("redirect");
+    const redirect = query?.get("redirect");
     React.useEffect(() => {
         if (session?.user) {
             router.push(redirect as string || '/');
