@@ -1,7 +1,7 @@
 'use client';
+import Loading from '@/app/loading';
 import NavbarClient from '@/components/navbar/NavbarClient';
 import React, { Suspense } from 'react'
-import Loading from './loading';
 
 
 const RootClientLayout: React.FC<{
@@ -9,10 +9,8 @@ const RootClientLayout: React.FC<{
 }> = ({ children }) => {
     return (
         <>
-            <NavbarClient/>
-            <Suspense fallback={<Loading/>}>
+            <NavbarClient />
             {children}
-            </Suspense>
         </>
     )
 }

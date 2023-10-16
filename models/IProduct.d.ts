@@ -3,10 +3,19 @@ interface IProductModel {
     name: string;
     category: string;
     oldPrice: number;
-    description: string;
+    description: IProductDescription;
     images: string[];
     price: string;
     qty: number;
+}
+
+interface IProductDescription {
+    feature:{
+        title:string;
+        lists: {
+            text:string;
+        }[]
+    }
 }
 
 interface IStoreProduct extends IProductModel {

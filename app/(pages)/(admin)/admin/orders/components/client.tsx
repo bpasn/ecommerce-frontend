@@ -28,7 +28,7 @@ const OrdersClient: React.FC<OrdersClientProps> = ({
                 />
             </div>
             <Separator />
-            <DataTable columns={columns} data={data} searchKey='label' />
+            <DataTable columns={columns} data={data} />
             <Separator />
             <Heading
                 title='Api'

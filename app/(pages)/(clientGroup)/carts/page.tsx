@@ -1,7 +1,5 @@
 'use client';
-import { useAppDispatch, useAppSelector } from "@/hooks/useReduxHook";
 import { formatter, wait } from "@/lib/utils";
-import { cartSelect, resetToCart } from "@/redux/slice/cartReduce";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import CartItem from './components/cartItem';
@@ -10,12 +8,12 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { OrderCreate } from "@/src/pages/api/orders";
 import { useRouter } from "next/navigation";
+import { useStoreCartStore } from "@/hooks/useCartHook";
 
 const CartPage = () => {
-    const { cartItem } = useAppSelector(cartSelect);
+    const { cartItem,resetCart } = useStoreCartStore();
     const [loading, setLoading] = useState(false);
     const route = useRouter();
-    const dispatch = useAppDispatch();
     const createOrder = async () => {
         setLoading(true);
         try {
@@ -24,7 +22,7 @@ const CartPage = () => {
                 orderItem: cartItem.map(c => ({ productId: c.id, quantity: c.quantity }))
 
             });
-            dispatch(resetToCart());
+            resetCart();
             toast.success("create order success");
             await wait(1.5 * 1000);
             route.push("/orders/history");

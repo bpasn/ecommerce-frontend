@@ -31,10 +31,10 @@ export default class ProductService implements IProductService {
         const mapper: IProductModel =
         {
             id: product?.id!,
-            name: product?.productName!,
+            name: product?.name!,
             category: product?.category?.name!,
             oldPrice: Number(product?.price),
-            description: JSON.stringify(product?.description!),
+            description: product?.description!,
             images: product?.images?.map(e => e.image)!,
             price: String(Number(product?.price)),
             qty: product?.qty!
@@ -43,27 +43,9 @@ export default class ProductService implements IProductService {
     }
     async findByName(productName: string): Promise<IFindByName[]> {
         const result = await prismadb.$queryRawUnsafe<IFindByName[]>(
-            `SELECT productName as label,id as value FROM Products WHERE productName LIKE '%${productName}%'`,
+            `SELECT name as label,id as value FROM Products WHERE name LIKE '%${productName}%'`,
         );
-        // const products = await prismadb.products.findMany({
-        //     where: {
-        //         productName: {
-        //             startsWith: productName
-        //         }
-        //     },
-        //     select: {
-        //         productName: true,
-        //         id: true
-        //     }
-        // });
-
-        // const mapperField: IFindByName[] = products.map(product => ({
-        //     label: product.productName,
-        //     value: product.id
-        // }));
-
         return result;
-
     }
 
 
@@ -87,22 +69,23 @@ export default class ProductService implements IProductService {
         const formatProducts: IProductModel[] = products.map((product) => {
             return ({
                 id: product.id,
-                name: product.productName,
+                name: product.name,
                 category: product.category.name,
                 oldPrice: Number(product.price),
-                description: JSON.stringify(product.description!),
+                description: product.description!,
                 images: product.images.map(e => e.image),
                 price: String(Number(product.price)),
                 qty: product.qty
             });
         });
-        return formatProducts;
+        return formatProducts || [];
     }
 
     async createProduct(product: ProductFormValues): Promise<IResponse> {
         const {
-            productName,
+            name,
             price,
+            brandId,
             title,
             qty,
             images,
@@ -111,11 +94,12 @@ export default class ProductService implements IProductService {
         } = product;
         const _product = await prismadb.products.create({
             data: {
-                productName,
+                name,
+                brandId,
                 title,
                 price: Number(parseFloat(String(price))).toFixed(2),
                 qty: qty,
-                sku: productName.substring(0, 4) + categoryId.substring(3, 6),
+                sku: name.substring(0, 4) + categoryId.substring(3, 6),
                 description: {
                     create: {
                         feature: {
@@ -147,7 +131,7 @@ export default class ProductService implements IProductService {
 
     async updateProduct(id: string, product: ProductFormValues): Promise<IResponse> {
         const {
-            productName,
+            name,
             price,
             title,
             qty,
@@ -157,7 +141,7 @@ export default class ProductService implements IProductService {
         } = product;
         const _product = await prismadb.products.update({
             data: {
-                productName,
+                name,
                 price,
                 qty,
                 categoryId,

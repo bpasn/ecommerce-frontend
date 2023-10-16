@@ -11,29 +11,6 @@ datasource db {
   relationMode = "prisma"
 }
 
-model Store {
-  id        String      @id @default(uuid())
-  name      String      @unique
-  user      String?
-  // category  Category[] @relation("StoreToCategory")
-  billboard Billboard[] @relation("StoreToBillboard")
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
-}
-
-model Billboard {
-  id        String   @id @default(uuid())
-  storeId   String
-  store     Store    @relation("StoreToBillboard", fields: [storeId], references: [id])
-  label     String
-  imageUrl  String
-  // categories  Category[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([storeId])
-}
-
 model Category {
   id          String        @id @default(uuid())
   subCategory SubCategory[] @relation("CategoryToSubCategory")
@@ -41,37 +18,51 @@ model Category {
   name        String
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
+}
+
+model Brand {
+  id        String     @id @default(uuid())
+  name      String     @unique
+  image     String?    @db.Text
+  product   Products[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
 
 }
 
 model SubCategory {
   id         String   @id @default(uuid())
   categoryId String
-  Category   Category @relation("CategoryToSubCategory",fields: [categoryId], references: [id])
+  category   Category @relation("CategoryToSubCategory", fields: [categoryId], references: [id])
   name       String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  Products   Products[]
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   @@index([categoryId])
 }
 
 model Products {
-  id          String              @id @default(uuid())
-  categoryId  String
-  category    Category            @relation("CategoryToProduct", fields: [categoryId], references: [id])
-  productName String              @unique
-  title       String
-  description productDescription?
-
-  images      ImageProduct[]
-  orderItem   OrderItem[]
-  price       Decimal
-  qty         Int
-  sku         String
-  createdAt   DateTime            @default(now())
-  updatedAt   DateTime            @updatedAt
-
+  id            String              @id @default(uuid())
+  categoryId    String
+  category      Category            @relation("CategoryToProduct", fields: [categoryId], references: [id])
+  name          String              @unique
+  brandId       String
+  subCategoryId String
+  title         String
+  description   productDescription?
+  images        ImageProduct[]
+  orderItem     OrderItem[]
+  price         Decimal
+  qty           Int
+  sku           String
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+  brand         Brand               @relation(fields: [brandId], references: [id])
+  subCategory   SubCategory         @relation(fields: [subCategoryId], references: [id])
   @@index([categoryId])
+  @@index([brandId])
+  @@index([subCategoryId])
 }
 
 model productDescription {
@@ -79,8 +70,8 @@ model productDescription {
   productId String   @unique
   products  Products @relation(fields: [productId], references: [id], onDelete: Cascade)
   feature   feature  @relation(fields: [featureId], references: [id])
-  // functions   functions @relation(fields: [functionsId], references: [id])
   featureId String   @unique
+  // functions   functions @relation(fields: [functionsId], references: [id])
   // functionsId String    @unique
 
   @@index([productId])

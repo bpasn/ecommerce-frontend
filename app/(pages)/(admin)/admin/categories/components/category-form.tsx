@@ -61,7 +61,7 @@ const CategoryForm: React.FC<CategoryFormProp> = ({
       if (!initialState) {
         response = await axios.post<IResponse>("/api/categories", data);
       } else {
-        response = await axios.patch<IResponse>(`/api/categories/${params.categoryId}`, data);
+        response = await axios.patch<IResponse>(`/api/categories/${params?.categoryId}`, data);
       }
       toast.success("Create categories success")
     } catch (error: any) {

@@ -5,32 +5,32 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { type NextRequest, NextResponse } from "next/server";
 
 
-export default async function handler(
-    req: NextApiRequest,
-    res: NextApiResponse<IResponse | IResponseBase<IProductModel> | IResponseBase<IProductModel[]>>
-) {
-    const sProduct: ProductService = new ProductService(AxiosService.getInstance());
-    try {
-        switch (req.method) {
-            case "GET":
-                const payload = await sProduct.getProduct();
-                return res.status(200).json({
-                    success: true,
-                    payload
-                });
-            case "POST":
-                const body = formSchema.parse(req.body);
-                return res.status(200).json(await sProduct.createProduct(body));
-        }
-    } catch (error: any) {
-        return NextResponse.json<IResponse>({
-            message: JSON.parse(error.message),
-            success: false
-        }, { status: 200 }
-        );
-    }
+// export default async function handler(
+//     req: NextApiRequest,
+//     res: NextApiResponse<IResponse | IResponseBase<IProductModel> | IResponseBase<IProductModel[]>>
+// ) {
+//     const sProduct: ProductService = new ProductService(AxiosService.getInstance());
+//     try {
+//         switch (req.method) {
+//             case "GET":
+//                 const payload = await sProduct.getProduct();
+//                 return res.status(200).json({
+//                     success: true,
+//                     payload
+//                 });
+//             case "POST":
+//                 const body = formSchema.parse(req.body);
+//                 return res.status(200).json(await sProduct.createProduct(body));
+//         }
+//     } catch (error: any) {
+//         return NextResponse.json<IResponse>({
+//             message: JSON.parse(error.message),
+//             success: false
+//         }, { status: 200 }
+//         );
+//     }
 
-}
+// }
 
 export const GET = async (req: Request) => {
     const sProduct: ProductService = new ProductService(AxiosService.getInstance());

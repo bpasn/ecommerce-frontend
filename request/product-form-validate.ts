@@ -1,9 +1,11 @@
 import { z } from "zod";
 
 export const formSchema = z.object({
-    productName: z.string().min(1),
+    name: z.string().min(1),
     title: z.string().min(1),
     categoryId: z.string().min(1),
+    subCategoryId: z.string().min(1),
+    brandId: z.string().min(1),
     price: z.coerce.number().min(1),
     qty: z.coerce.number().min(1),
     sku: z.string(),

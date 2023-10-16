@@ -1,4 +1,5 @@
 import prismadb from "@/lib/prismadb.util";
+import CategoryService from "@/services/category/category.service";
 import { NextApiRequest } from "next";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from 'zod';
@@ -9,6 +10,21 @@ const schema = z.object({
 });
 type requestBody = z.infer<typeof schema>;
 
+export async function GET(req: Request) {
+    try {
+
+        const url = new URL(req.url);
+        const take = url.searchParams.get("take");
+        const sCate = new CategoryService();
+        const result = await sCate.get(Number(take));
+        return NextResponse.json(result)
+    } catch (error: any) {
+        return NextResponse.json({
+            message: error.message,
+            success: false
+        })
+    }
+}
 export async function POST(req: Request) {
     const body: requestBody = await req.json();
     const validateSchema = schema.safeParse(body);

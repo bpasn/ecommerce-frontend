@@ -4,7 +4,8 @@ services:
 
   database:
     mem_limit: 256m
-    cpus: 0.0001
+    mem_reservation: 128M
+    cpus: 0.1
     image: mysql
     ports:
       - "3300:3306"

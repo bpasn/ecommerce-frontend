@@ -1,5 +1,5 @@
 import Banner from '@/components/Banner';
-import ProductItem from './components/product-item';
+import ProductItem from './product/components/product-item';
 import axios from 'axios';
 import { wait } from '@/lib/utils';
 
@@ -9,7 +9,6 @@ interface ClientPageProps {
 
 const ClientPage: React.FC<ClientPageProps> = async ({
 }) => {
-  await wait(3000)
   const { data: product } = await axios.get<IResponseBase<IProductModel[]>>("http://localhost:3000/api/products");
 
   return (

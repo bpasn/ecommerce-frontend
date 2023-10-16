@@ -9,7 +9,7 @@ import Image from 'next/image';
 export interface OrdersColumns {
     image: string;
     productId: string;
-    productName:string;
+    name:string;
     orderId: string;
     quantity: string;
     price: string;
@@ -25,12 +25,12 @@ export const columns: ColumnDef<OrdersColumns>[] = [
                     <Link href={`/product/${original.productId}?redirect=/order/${original.orderId}`} className="flex items-center">
                         <Image
                             src={original.image}
-                            alt={original.productName}
+                            alt={original.name}
                             width={50}
                             height={50}
                         />
                         &nbsp;
-                        {original.productName}
+                        {original.name}
                     </Link>
                 </>
             );

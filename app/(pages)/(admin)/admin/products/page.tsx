@@ -23,6 +23,7 @@ const ProductPage: React.FC<ProductPageProps> = async ({
   const Products = await prismadb.products.findMany({
     include: {
       category: true,
+      brand:true,
       description: {
         include: {
           feature: {
@@ -40,7 +41,7 @@ const ProductPage: React.FC<ProductPageProps> = async ({
 
   const formattedProducts: ProductColumns[] = Products.map((item) => ({
     id: item.id as string,
-    productName: item.productName,
+    name: item.name,
     categoryName: item.category.name,
     price: String(item.price.toFixed(2)),
     qty: String(item.qty),

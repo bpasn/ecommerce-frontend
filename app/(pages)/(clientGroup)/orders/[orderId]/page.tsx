@@ -32,7 +32,7 @@ const ProductPage = async ({
         image: item.product.images[0].image,
         productId: item.product.id,
         orderId: orders.id,
-        productName: item.product.productName,
+        name: item.product.name,
         quantity: item.quantity.toString(),
         price: String(item.product.price.toFixed(2)),
         subtotal: formatter.format(+item.product.price * item.quantity)

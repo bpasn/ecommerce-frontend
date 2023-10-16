@@ -37,7 +37,7 @@ interface InputFormProps<T extends FieldValues> extends UseControllerProps<T> {
     formLabel: string;
     disabled?: boolean;
     placeholder?: string;
-    onChange?:ChangeEventHandler<HTMLInputElement>
+    onChange?: ChangeEventHandler<HTMLInputElement>
 }
 export function InputForm<T extends FieldValues>({
     formLabel,
@@ -46,7 +46,7 @@ export function InputForm<T extends FieldValues>({
     disabled = false,
     placeholder = "Please enter your " + name,
     onChange
-    
+
 }: InputFormProps<T>) {
     return (
         <FormField
@@ -56,7 +56,7 @@ export function InputForm<T extends FieldValues>({
                 <FormItem>
                     <FormLabel>{formLabel}</FormLabel>
                     <FormControl>
-                        <Input {...field} onChange={(e) => field.onChange(e)} disabled={disabled} placeholder={placeholder}  />
+                        <Input {...field} onChange={(e) => field.onChange(e)} disabled={disabled} placeholder={placeholder} />
                     </FormControl>
                     <FormMessage />
                 </FormItem>
@@ -105,14 +105,15 @@ export function SelectField<T extends FieldValues>({
     name,
     disabled = false,
     placeholder = "Please enter your " + name,
-    options
+    options,
 }: SelectFieldProps<T>) {
     return (
         <FormField
+
             control={control}
             name={name}
             render={({ field }) => (
-                <FormItem>
+                <FormItem >
                     <FormLabel>{formLabel}</FormLabel>
                     <Select
                         disabled={disabled}
@@ -143,4 +144,80 @@ export function SelectField<T extends FieldValues>({
             )}
         />
     );
+}
+
+interface SearchSelectFieldProps<T extends FieldValues> extends InputFormProps<T> {
+    options: OptionSelect[];
+    onClick?: () => void;
+    onInputChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    inputPlaceholder: string;
+    onSelectItem?: (v: string) => void;
+}
+export function SearchSelectField<T extends FieldValues>({
+    formLabel,
+    control,
+    name,
+    disabled = false,
+    placeholder = "Please enter your " + name,
+    inputPlaceholder = "Search input",
+    options,
+    onInputChange,
+    onClick,
+    onSelectItem
+}: SearchSelectFieldProps<T>) {
+    return (
+        <FormField
+            control={control}
+            name={name}
+            render={({ field }) => (
+                <FormItem>
+                    <FormLabel>{formLabel}</FormLabel>
+                    <Select
+                        onOpenChange={(e) => {
+                            if (e && !options.length) {
+                                onClick?.();
+                            }
+                        }}
+
+                        disabled={false}
+                        onValueChange={(v) => {
+                            field.onChange(v);
+                            onSelectItem?.(v)
+                        }}
+                        defaultValue={field.value}
+                        value={field.value}
+                    >
+                        <FormControl>
+                            <SelectTrigger value={field.value} defaultValue={field.value} placeholder={placeholder}>
+                                <SelectValue
+                                    defaultValue={field.value}
+                                    placeholder={placeholder}
+                                />
+                            </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                            <div className="mb-2">
+                                <Input placeholder={inputPlaceholder} onChange={onInputChange} />
+                            </div>
+                            {options.length ? options.map((o: any) => (
+                                <SelectItem
+                                    onClick={() => {
+                                        console.log("clickkkkk")
+                                    }}
+                                    key={o.value}
+                                    value={o.value}
+                                    className="cursor-pointer"
+                                >
+                                    {o.name}
+                                </SelectItem>
+                            )) : disabled ? "Loading..." : (
+                                <div className="p-2">No Result</div>
+                            )}
+                        </SelectContent>
+                    </Select>
+                    <FormMessage />
+                </FormItem>
+            )}
+        />
+    )
 }

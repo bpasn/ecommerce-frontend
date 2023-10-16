@@ -28,6 +28,16 @@ const MainNav: React.FC<MainNavProps> = ({
             active: pathname === `/admin/categories`
         },
         {
+            href: `/admin/sub-categories`,
+            label: "Sub Categories",
+            active: pathname === `/admin/sub-categories`
+        },
+        {
+            href: `/admin/brand`,
+            label: "Brands",
+            active: pathname === `/admin/brand`
+        },
+        {
             href: `/admin/products`,
             label: "Products",
             active: pathname === `/admin/products`

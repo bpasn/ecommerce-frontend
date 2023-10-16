@@ -8,55 +8,62 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useEffect, useState } from "react";
-import { Controller, useFieldArray, useForm } from "react-hook-form";
+import { useState } from "react";
+import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
-import { ImageProduct, Products, feature, listFeature, productDescription } from "@prisma/client";
+import {
+  Brand,
+  ImageProduct,
+  Products,
+  SubCategory,
+  feature,
+  listFeature,
+  productDescription
+} from "@prisma/client";
 import Heading from "@/components/ui/heading";
 import axios from "axios";
-import { UseStoreAlert, useStoreAlert } from "@/hooks/useStoreAlert";
-import { Alert, AlertDescription, AlertTitle, alertVariants } from "@/components/ui/alert";
-import { VariantProps } from "class-variance-authority";
 import { useParams } from "next/navigation";
-import { cn, wait } from "@/lib/utils";
-import { InputForm, OptionSelect, SelectField, TextareaForm } from "@/components/input-form";
+import { wait } from "@/lib/utils";
+import { InputForm, OptionSelect, SearchSelectField, SelectField, TextareaForm } from "@/components/input-form";
 import { ImageUpload } from "@/components/ui/image-upload";
 import { formSchema } from "@/request/product-form-validate";
 import toast from "react-hot-toast";
-import DescriptionProduct from "./description";
 import { X } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { register } from "module";
+import prismadb from "@/lib/prismadb.util";
 
 
 
 export type ProductFormValues = z.infer<typeof formSchema>;
 
-export interface ProductFormProp {
-  initialState: Products &
-  {
-    images: ImageProduct[];
-  } & {
-    description: productDescription & {
-      feature: feature & {
-        lists: listFeature[];
-      };
+export interface InitialStateFormProduct extends Products {
+  images: ImageProduct[];
+  description: productDescription & {
+    feature: feature & {
+      lists: listFeature[];
     };
-  };
+  },
+  brand: Brand,
+  subCategory: SubCategory
+}
+
+export interface ProductFormProp {
+  initialState: InitialStateFormProduct;
   categoryOption: OptionSelect[];
 };
-const variantMap: Record<UseStoreAlert['title'], VariantProps<typeof alertVariants>['variant']> = {
-  "success": "success",
-  "error": "error"
-};
+
 const ProductForm: React.FC<ProductFormProp> = ({
   initialState,
   categoryOption
 }) => {
   const params = useParams();
   const [loading, setLoading] = useState(false);
-  const storeAlert = useStoreAlert();
+  const [valCategory, setValCategory] = useState<string>();
+  const [valSubCategory, setValSubCategory] = useState<string>();
+  const [optionCategory, setOptionCategory] = useState<OptionSelect[]>([]);
+  const [optionSubCategory, setOptionSubCategory] = useState<OptionSelect[]>([]);
+  const [optionBrand, setOptionBrand] = useState<OptionSelect[]>([]);
 
   const form = useForm<ProductFormValues>({
     resolver: zodResolver(formSchema),
@@ -66,9 +73,11 @@ const ProductForm: React.FC<ProductFormProp> = ({
       images: localStorage.getItem("images") ? JSON.parse(localStorage.getItem("images")!) : initialState.images,
     }
       : {
-        productName: "",
+        name: "",
         title: "",
+        brandId: "",
         categoryId: "",
+        subCategoryId: "",
         price: Number(parseFloat(String(0.00)).toFixed(2)),
         qty: 0,
         sku: "",
@@ -118,6 +127,24 @@ const ProductForm: React.FC<ProductFormProp> = ({
     }
   };
 
+  const getCategory = async () => {
+    setLoading(true);
+    try {
+      const result = await axios.get<OptionSelect[]>("/api/categories/?take=5");
+      setOptionCategory(result.data)
+    } catch (error: any) {
+      toast.error(error.message)
+    } finally {
+      setLoading(false);
+    }
+
+  }
+  const getSubCategory = () => {
+
+  }
+  const getBrand = () => {
+
+  }
 
   const title = initialState ? "Edit Product" : "Create Product";
   const description = initialState ? "Update your Product" : "Add new Product";
@@ -125,12 +152,6 @@ const ProductForm: React.FC<ProductFormProp> = ({
   return (
     <>
       <Heading title={title} description={description} />
-      {storeAlert.show && <Alert variant={variantMap[storeAlert.title]} >
-        <AlertTitle>{storeAlert.title}</AlertTitle>
-        <AlertDescription>
-          {storeAlert.description}
-        </AlertDescription>
-      </Alert>}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
           <FormField
@@ -142,6 +163,7 @@ const ProductForm: React.FC<ProductFormProp> = ({
                   <FormLabel>Images</FormLabel>
                   <FormControl>
                     <ImageUpload
+                      pathFile="images/products"
                       value={field.value.map(img => img.image)}
                       onChange={(image) => {
                         field.value = [...field.value, { image }];
@@ -160,7 +182,7 @@ const ProductForm: React.FC<ProductFormProp> = ({
             <InputForm
               control={form.control}
               formLabel="Product Name"
-              name="productName"
+              name="name"
             />
             {/* title */}
             <InputForm
@@ -168,13 +190,34 @@ const ProductForm: React.FC<ProductFormProp> = ({
               formLabel="Product Title"
               name="title"
             />
-            {/* select */}
-            <SelectField
+            {/* select Category */}
+            <SearchSelectField
+              onClick={getCategory}
               control={form.control}
               formLabel={"Category Name"}
               placeholder="Choose your category name"
               name={"categoryId"}
-              options={categoryOption}
+              onSelectItem={(v: string) => setValCategory(v)}
+              options={optionCategory}
+              onInputChange={() => { }}
+              inputPlaceholder={""} />
+            {/* select Sub Category*/}
+            <SelectField
+              disabled={!valCategory || loading}
+              control={form.control}
+              formLabel={"Sub Category Name"}
+              placeholder="Choose your sub category name"
+              name={"subCategoryId"}
+              options={optionSubCategory}
+            />
+            {/* select Brand */}
+            <SelectField
+              control={form.control}
+              disabled={!valCategory || !valSubCategory || loading}
+              formLabel={"Brand"}
+              placeholder="Choose your Brand"
+              name={"brandId"}
+              options={optionBrand}
             />
 
             {/* Price */}

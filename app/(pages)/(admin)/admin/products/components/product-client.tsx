@@ -29,7 +29,7 @@ const ProductClient: React.FC<ProductClientProps> = ({
                 </Button>
             </div>
             <Separator />
-            <DataTable columns={columns} data={data} searchKey='productName' />
+            <DataTable columns={columns} data={data} searchKey='name' />
         </>
     );
 };

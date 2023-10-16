@@ -8,12 +8,13 @@ import MainNavClient from './MainNavClient';
 import { useAppSelector } from '@/hooks/useReduxHook';
 import { cartSelect } from '@/redux/slice/cartReduce';
 import Sidebar from './Sidebar';
+import { useStoreCartStore } from '@/hooks/useCartHook';
 
 type Props = {};
 
 const NavbarClient = (props: Props) => {
-    const { cartItem } = useAppSelector(cartSelect);
-
+    // const { cartItem } = useAppSelector(cartSelect);
+    const storeCartItem = useStoreCartStore();
     return (
         <div className="border-b">
             <div className="flex h-16 items-center px-4">
@@ -30,7 +31,7 @@ const NavbarClient = (props: Props) => {
                     >
                         <ShoppingCartIcon />
                         <Badge className='absolute -top-3 left-4 rounded-full border-transparent' variant={"outline"}>
-                            {cartItem.reduce((
+                            {storeCartItem.cartItem.reduce((
                                 quantity:number,
                                 item
                             ) => quantity + item.quantity,0)}

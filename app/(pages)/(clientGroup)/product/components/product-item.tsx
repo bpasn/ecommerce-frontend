@@ -38,11 +38,7 @@ const ProductItem: React.FC<ProductItemProps> = ({
                     </span>
                 </p>
                 <p className='text-xs text-gray-600 text-justify'>
-                    {
-                        product.description.length > 120
-                            ? product.description.substring(0, 100) + "..."
-                            : product.description
-                    }
+                    {product.description.toString()}
                 </p>
             </div>
             <button

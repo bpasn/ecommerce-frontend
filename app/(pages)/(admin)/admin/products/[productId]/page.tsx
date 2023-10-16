@@ -1,6 +1,6 @@
 import prismadb from '@/lib/prismadb.util';
 import React from 'react';
-import ProductForm from '../components/product-form';
+import ProductForm, { InitialStateFormProduct } from '../components/product-form';
 import { OptionSelect } from '@/components/input-form';
 
 const ProductPage = async ({
@@ -12,6 +12,9 @@ const ProductPage = async ({
         },
         include: {
             images: true,
+            category: true,
+            brand: true,
+            subCategory:true,
             description: {
                 include: {
                     feature: {
@@ -33,19 +36,7 @@ const ProductPage = async ({
     return (
         <div className="flex-col">
             <div className="flex-1 space-y-4 p-8 pt-6">
-                <ProductForm categoryOption={formatCategoriesOption} initialState={{
-                    id: product?.id!,
-                    categoryId: product?.categoryId!,
-                    productName: product?.productName!,
-                    title: product?.title!,
-                    price: product?.price!,
-                    qty: product?.qty!,
-                    sku: product?.sku!,
-                    createdAt: product?.createdAt!,
-                    updatedAt: product?.updatedAt!,
-                    images: product?.images!,
-                    description: product?.description!
-                }} />
+                <ProductForm categoryOption={formatCategoriesOption} initialState={product as InitialStateFormProduct} />
             </div>
         </div>
     );

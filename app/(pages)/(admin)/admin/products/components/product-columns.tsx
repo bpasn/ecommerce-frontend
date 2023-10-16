@@ -6,7 +6,7 @@ import { CellAction } from './product-cell-action';
 
 export interface ProductColumns {
     id: string;
-    productName: string;
+    name: string;
     categoryName: string;
     price: string;
     qty: string;
@@ -16,7 +16,7 @@ export interface ProductColumns {
 
 export const columns: ColumnDef<ProductColumns>[] = [
     {
-        accessorKey: "productName",
+        accessorKey: "name",
         header: "Product Name",
         size:100,
         maxSize:100,

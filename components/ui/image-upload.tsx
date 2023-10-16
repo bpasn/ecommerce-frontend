@@ -8,15 +8,18 @@ import { Trash } from "lucide-react";
 import { Button } from "./button";
 import AlertModal from "../modals/alert-modal";
 import toast from "react-hot-toast";
+import _ from "lodash";
 interface ImageUploadProps {
     disabled?: boolean;
+    pathFile: string;
     onChange: (val: string) => void;
     onRemove: (val: string) => void;
-    value: string[];
+    value: string[] | string;
 }
 export const ImageUpload: React.FC<ImageUploadProps> = ({
     disabled,
     onChange,
+    pathFile,
     onRemove,
     value
 }) => {
@@ -26,7 +29,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
     const [urlImageRemove, setUrlImageRemove] = React.useState<string>();
     const inputFileRef = React.useRef<HTMLInputElement>(null);
     const buttonRef = React.useRef<HTMLButtonElement>(null);
-    
+
     React.useEffect(() => {
         setIsMounted(true);
     }, []);
@@ -38,12 +41,12 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
         setLoading(true);
         for (let i = 0; i < files?.length; i++) {
             const file = files[i];
-            uploadImageToFirebase(`images/products/${file?.name}`, file!)
+            uploadImageToFirebase(`${pathFile}/${file?.name}`, file!)
                 .then(res => {
                     onChange(res);
                     const images = localStorage.getItem("images") ? JSON.parse(localStorage.getItem("images")!) : [];
                     images.push({ image: res });
-                    localStorage.setItem("images",JSON.stringify(images));
+                    localStorage.setItem("images", JSON.stringify(images));
                 })
                 .catch(e => { throw e; })
                 .finally(() => {
@@ -58,10 +61,10 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
             setAlertModal(!alertModal);
         }).catch((e: any) => toast.error(e.message));
         onRemove(urlImageRemove!);
-        const images:[] = localStorage.getItem("images") ? JSON.parse(localStorage.getItem("images")!) : [];
-        localStorage.setItem("images",JSON.stringify(images.filter(img => img !== urlImageRemove)));
+        const images: [] = localStorage.getItem("images") ? JSON.parse(localStorage.getItem("images")!) : [];
+        localStorage.setItem("images", JSON.stringify(images.filter(img => img !== urlImageRemove)));
         setUrlImageRemove("");
-        
+
     };
     return (
         <div>
@@ -73,7 +76,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
                 }}
                 loading={loading} />
             <div className="mb-4 flex flex-row items-center gap-4">
-                {value.map(url => (
+                {Array.isArray(value) ? value.map(url => (
                     <div key={url} className="relative w-[200px] h-[200px] block-image rounded-md overflow-hidden">
                         <Image
                             fill
@@ -95,7 +98,28 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
                             </Button>
                         </div>
                     </div>
-                ))}
+                )) : !_.isEmpty(value) && <div className="relative w-[200px] h-[200px] block-image rounded-md overflow-hidden">
+                    <Image
+                        fill
+                        className="object-cover"
+                        src={value}
+                        alt="Image"
+                    />
+                    <div className="z-10 absolute top-2 right-2">
+                        <Button
+                            type="button"
+                            ref={buttonRef}
+                            onClick={() => {
+                                setAlertModal(true);
+                                setUrlImageRemove(value);
+                            }}
+                            variant={"danger"}
+                            size={"icon"}>
+                            <Trash />
+                        </Button>
+                    </div>
+                </div>
+                }
             </div>
             <div className="mb-4 flex flex-row items-center gap-4 w-64">
                 <label htmlFor="file-input" className="sr-only">Choose file</label>
