@@ -179,7 +179,7 @@ export function SearchSelectField<T extends FieldValues>({
                             }
                         }}
 
-                        disabled={false}
+                        disabled={disabled}
                         onValueChange={(v) => {
                             field.onChange(v);
                             onSelectItem?.(v)
@@ -200,10 +200,7 @@ export function SearchSelectField<T extends FieldValues>({
                                 <Input placeholder={inputPlaceholder} onChange={onInputChange} />
                             </div>
                             {options.length ? options.map((o: any) => (
-                                <SelectItem
-                                    onClick={() => {
-                                        console.log("clickkkkk")
-                                    }}
+                                <SelectItem 
                                     key={o.value}
                                     value={o.value}
                                     className="cursor-pointer"

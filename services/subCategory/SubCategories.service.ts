@@ -5,16 +5,11 @@ import { SubCategoryFormValues } from "@/request/subcategory-form-zod";
 import { BrandFormValues } from "@/request/brand-form-zod";
 
 export default class SubCategoriesService implements ISubCategories {
-    async get(): Promise<IResponseBase<SubCategory[]>> {
+
+    async getByName(name: string): Promise<IResponseBase<SubCategory | null>> {
         return {
             success: true,
-            payload: await prismadb.subCategory.findMany({ orderBy: { createdAt: "desc" } })
-        }
-    }
-    async getByName(name:string): Promise<IResponseBase<SubCategory | null>> {
-        return {
-            success: true,
-            payload: await prismadb.subCategory.findFirst({ where: {name}, orderBy: { createdAt: "desc" } })
+            payload: await prismadb.subCategory.findFirst({ where: { name }, orderBy: { createdAt: "desc" } })
         }
     }
 
@@ -25,7 +20,7 @@ export default class SubCategoriesService implements ISubCategories {
             payload: await prismadb.subCategory.findFirst({ orderBy: { createdAt: "desc" } })
         }
     }
-    async update(id: string, data: BrandFormValues): Promise<IResponse> {
+    async update(id: string, data: SubCategoryFormValues): Promise<IResponse> {
         await prismadb.subCategory.update({
             where: { id },
             data: data
@@ -56,6 +51,14 @@ export default class SubCategoriesService implements ISubCategories {
 
     async delete(id: string): Promise<void> {
         await prismadb.subCategory.delete({ where: { id } });
+    }
+
+    async get(take: number = 10, categoryId: string) {
+        const result = await prismadb.subCategory.findMany({
+            take: take,
+            where:{categoryId}
+        });
+        return result.map(c => ({ name: c.name, value: c.id }));
     }
 
 

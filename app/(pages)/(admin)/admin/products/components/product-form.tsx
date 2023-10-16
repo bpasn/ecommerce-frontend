@@ -127,11 +127,11 @@ const ProductForm: React.FC<ProductFormProp> = ({
     }
   };
 
-  const getCategory = async () => {
+  const getResultDropdown = async (url: string, callback:(o:OptionSelect[]) => void) => {
     setLoading(true);
     try {
-      const result = await axios.get<OptionSelect[]>("/api/categories/?take=5");
-      setOptionCategory(result.data)
+      const result = await axios.get<OptionSelect[]>(url);
+      callback(result.data);
     } catch (error: any) {
       toast.error(error.message)
     } finally {
@@ -139,16 +139,11 @@ const ProductForm: React.FC<ProductFormProp> = ({
     }
 
   }
-  const getSubCategory = () => {
 
-  }
-  const getBrand = () => {
-
-  }
 
   const title = initialState ? "Edit Product" : "Create Product";
   const description = initialState ? "Update your Product" : "Add new Product";
-
+console.log(valCategory)
   return (
     <>
       <Heading title={title} description={description} />
@@ -192,7 +187,10 @@ const ProductForm: React.FC<ProductFormProp> = ({
             />
             {/* select Category */}
             <SearchSelectField
-              onClick={getCategory}
+              onClick={() => getResultDropdown("/api/categories?take=5",(o) => {
+                setOptionCategory(o);
+                setOptionSubCategory([]);
+              })}
               control={form.control}
               formLabel={"Category Name"}
               placeholder="Choose your category name"
@@ -202,22 +200,29 @@ const ProductForm: React.FC<ProductFormProp> = ({
               onInputChange={() => { }}
               inputPlaceholder={""} />
             {/* select Sub Category*/}
-            <SelectField
+            <SearchSelectField
+              onClick={() => getResultDropdown(`/api/sub-categories?take=5&categoriesId=${valCategory}`,(o) => setOptionSubCategory(o))}
+              onSelectItem={(v: string) => setValSubCategory(v)}
               disabled={!valCategory || loading}
               control={form.control}
               formLabel={"Sub Category Name"}
               placeholder="Choose your sub category name"
               name={"subCategoryId"}
               options={optionSubCategory}
+              onInputChange={() => { }}
+              inputPlaceholder={""}
             />
             {/* select Brand */}
-            <SelectField
+            <SearchSelectField
+              onClick={() => getResultDropdown("/api/brand?take=5", (o) => setOptionBrand(o))}
               control={form.control}
               disabled={!valCategory || !valSubCategory || loading}
               formLabel={"Brand"}
               placeholder="Choose your Brand"
               name={"brandId"}
               options={optionBrand}
+              onInputChange={() => { }}
+              inputPlaceholder={""}
             />
 
             {/* Price */}
