@@ -2,9 +2,9 @@ import { z } from "zod";
 
 export const formSchema = z.object({
     name: z.string().min(1),
-    title: z.string().min(1),
+    title: z.string().optional(),
     categoryId: z.string().min(1),
-    subCategoryId: z.string().min(1),
+    subCategoryId: z.string().optional(),
     brandId: z.string().min(1),
     price: z.coerce.number().min(1),
     qty: z.coerce.number().min(1),

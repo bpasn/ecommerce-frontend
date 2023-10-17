@@ -1,6 +1,10 @@
+const { omit } = require("lodash");
+
 const { PrismaClient } = require('@prisma/client');
 
- async function main() {
+async function main() {
+    const prismadb = new PrismaClient();
+
     const json = {
         "cutting_tools": [
             "Carbide Burrs",
@@ -51,16 +55,25 @@ const { PrismaClient } = require('@prisma/client');
             "Torque Wrench"
         ]
     };
-    const prismadb = new PrismaClient();
     let arrayData: {
         categoryId: string;
         name: string;
     }[] = [];
+    let categoryArr: { name: string }[] = [];
+    for (const [key] of Object.entries(json)) {
+        categoryArr.push({
+            name: key.replace(/\_/g, " ")
+        })
+    }
+    await prismadb.category.createMany({
+        data: categoryArr
+    });
+
     for (const [key, value] of Object.entries(json)) {
         const categoryName = key.replace(/\_/g, " ");
         const category = await prismadb.category.findFirst({ where: { name: categoryName } });
         for (let v of value) {
-            arrayData.push({ categoryId: category.id, name: v });
+            arrayData.push({ categoryId: category?.id!, name: v });
         }
     }
     await prismadb.subCategory.createMany({
@@ -71,6 +84,6 @@ const { PrismaClient } = require('@prisma/client');
 
 main().then(res => {
     console.log(res)
-}) .catch((error) => {
-console.log(error)
+}).catch((error) => {
+    console.log(error)
 })

@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { DataTable } from '@/components/ui/data-table';
 import { Separator } from '@/components/ui/separator';
 import { Plus } from 'lucide-react';
-import { useRouter} from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { columns, SubCategoryColumns } from './sub-category-columns';
 import Heading from '@/components/ui/heading';
 
@@ -28,7 +28,10 @@ const SubCategoryClient: React.FC<SubCategoryClientProps> = ({
                 </Button>
             </div>
             <Separator />
-            <DataTable columns={columns} data={data} />
+            <DataTable
+                columns={columns}
+                data={data}
+            />
         </>
     );
 };

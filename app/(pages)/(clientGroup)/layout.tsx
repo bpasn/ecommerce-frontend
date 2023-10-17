@@ -10,7 +10,9 @@ const RootClientLayout: React.FC<{
     return (
         <>
             <NavbarClient />
-            {children}
+            <main className='bg-gray-200/100'>
+                {children}
+            </main>
         </>
     )
 }

@@ -7,10 +7,10 @@ import { NextResponse, type NextRequest } from "next/server";
 
 export const GET = async (
     req: Request,
-    { params }: { params: { productId: string; }; }
+    { params }: { params: { productId: string; categoryName: string }; }
 ) => {
     const sProduct: ProductService = new ProductService(AxiosService.getInstance());
-    const { productId } = params;
+    const { productId, categoryName } = params;
     try {
         const payload = await sProduct.getProductById(productId);
         return NextResponse.json<IResponseBase<IProductModel>>({
@@ -34,7 +34,7 @@ export const PATCH = async (
 
     try {
         let body = await req.json();
-        body = formSchema.parse({ ...body});
+        body = formSchema.parse({ ...body });
         return NextResponse.json(await sProduct.updateProduct(productId?.toString()!, body));
     } catch (error: any) {
         return NextResponse.json({

@@ -122,6 +122,8 @@ const SubCategoryForm: React.FC<SubCategoryFormProp> = ({
               formLabel="Sub Category Name"
             />
             <SearchSelectField
+              api="sub-categories"
+              setStateOption={setCategories}
               options={categories}
               control={form.control}
               disabled={loading}

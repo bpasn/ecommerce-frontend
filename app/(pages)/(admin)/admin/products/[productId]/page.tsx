@@ -36,7 +36,7 @@ const ProductPage = async ({
     return (
         <div className="flex-col">
             <div className="flex-1 space-y-4 p-8 pt-6">
-                <ProductForm categoryOption={formatCategoriesOption} initialState={product as InitialStateFormProduct} />
+                <ProductForm initialState={product as InitialStateFormProduct} />
             </div>
         </div>
     );

@@ -1,6 +1,7 @@
 interface IProductModel {
     id: string;
     name: string;
+    title?:string;
     category: string;
     oldPrice: number;
     description: IProductDescription;

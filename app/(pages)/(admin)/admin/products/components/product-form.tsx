@@ -8,7 +8,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
@@ -19,19 +19,24 @@ import {
   SubCategory,
   feature,
   listFeature,
-  productDescription
+  productDescription,
+  Category
 } from "@prisma/client";
 import Heading from "@/components/ui/heading";
 import axios from "axios";
 import { useParams } from "next/navigation";
 import { wait } from "@/lib/utils";
-import { InputForm, OptionSelect, SearchSelectField, SelectField, TextareaForm } from "@/components/input-form";
+import {
+  InputForm,
+  OptionSelect,
+  SearchSelectField
+} from "@/components/input-form";
 import { ImageUpload } from "@/components/ui/image-upload";
 import { formSchema } from "@/request/product-form-validate";
 import toast from "react-hot-toast";
 import { X } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import prismadb from "@/lib/prismadb.util";
+import { useStoreImageSessionStore } from "@/hooks/image-session-storage";
 
 
 
@@ -44,33 +49,33 @@ export interface InitialStateFormProduct extends Products {
       lists: listFeature[];
     };
   },
+  category: Category,
   brand: Brand,
   subCategory: SubCategory
 }
 
 export interface ProductFormProp {
   initialState: InitialStateFormProduct;
-  categoryOption: OptionSelect[];
 };
 
 const ProductForm: React.FC<ProductFormProp> = ({
   initialState,
-  categoryOption
 }) => {
   const params = useParams();
   const [loading, setLoading] = useState(false);
   const [valCategory, setValCategory] = useState<string>();
-  const [valSubCategory, setValSubCategory] = useState<string>();
   const [optionCategory, setOptionCategory] = useState<OptionSelect[]>([]);
   const [optionSubCategory, setOptionSubCategory] = useState<OptionSelect[]>([]);
   const [optionBrand, setOptionBrand] = useState<OptionSelect[]>([]);
-
+  const storeImageSession = useStoreImageSessionStore();
   const form = useForm<ProductFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: initialState ? {
       ...initialState,
       price: parseFloat(String(initialState.price)),
-      images: localStorage.getItem("images") ? JSON.parse(localStorage.getItem("images")!) : initialState.images,
+      title: initialState.title,
+      subCategoryId: initialState.subCategoryId || undefined,
+      images: storeImageSession.images.length ? storeImageSession.images : initialState.images,
     }
       : {
         name: "",
@@ -127,7 +132,7 @@ const ProductForm: React.FC<ProductFormProp> = ({
     }
   };
 
-  const getResultDropdown = async (url: string, callback:(o:OptionSelect[]) => void) => {
+  const getResultDropdown = async (url: string, callback: (o: OptionSelect[]) => void) => {
     setLoading(true);
     try {
       const result = await axios.get<OptionSelect[]>(url);
@@ -140,10 +145,21 @@ const ProductForm: React.FC<ProductFormProp> = ({
 
   }
 
+  useEffect(() => {
+    if (initialState && initialState.category) {
+      setOptionCategory([{ name: initialState.category.name, value: initialState.category.id }])
+    }
+    if (initialState && initialState.subCategory) {
+      setOptionSubCategory([{ name: initialState.subCategory.name, value: initialState.subCategory.id }])
+    }
+    if (initialState && initialState.brand) {
+      setOptionBrand([{ name: initialState.brand.name, value: initialState.brand.id }])
+    }
+  }, [])
+
 
   const title = initialState ? "Edit Product" : "Create Product";
   const description = initialState ? "Update your Product" : "Add new Product";
-console.log(valCategory)
   return (
     <>
       <Heading title={title} description={description} />
@@ -187,45 +203,40 @@ console.log(valCategory)
             />
             {/* select Category */}
             <SearchSelectField
-              onClick={() => getResultDropdown("/api/categories?take=5",(o) => {
-                setOptionCategory(o);
-                setOptionSubCategory([]);
-              })}
+              disabled={loading}
+              onClick={() => getResultDropdown("/api/categories?take=5", (o) => setOptionCategory(o))}
               control={form.control}
               formLabel={"Category Name"}
               placeholder="Choose your category name"
               name={"categoryId"}
-              onSelectItem={(v: string) => setValCategory(v)}
               options={optionCategory}
-              onInputChange={() => {
-                
-              }}
-              inputPlaceholder={""} />
-            {/* select Sub Category*/}
+              modelName="Category"
+              setStateOption={setOptionCategory} />
+
+            {/* select SUb Category */}
             <SearchSelectField
-              onClick={() => getResultDropdown(`/api/sub-categories?take=5&categoriesId=${valCategory}`,(o) => setOptionSubCategory(o))}
-              onSelectItem={(v: string) => setValSubCategory(v)}
-              disabled={!valCategory || loading}
+              disabled={loading || !form.getValues().categoryId}
+              onClick={() => getResultDropdown(`/api/sub-categories?take=5&categoriesId=${form.getValues().categoryId}`, (o) => setOptionSubCategory(o))}
               control={form.control}
               formLabel={"Sub Category Name"}
-              placeholder="Choose your sub category name"
+              placeholder="Choose your Sub category name"
               name={"subCategoryId"}
               options={optionSubCategory}
-              onInputChange={() => { }}
-              inputPlaceholder={""}
-            />
-            {/* select Brand */}
+              modelName="SubCategory"
+              setStateOption={setOptionSubCategory} />
+
+            {/* select SUb Category */}
             <SearchSelectField
-              onClick={() => getResultDropdown("/api/brand?take=5", (o) => setOptionBrand(o))}
+              disabled={loading}
+              onClick={() => getResultDropdown(`/api/brand?take=5`, (o) => setOptionBrand(o))}
               control={form.control}
-              disabled={!valCategory || !valSubCategory || loading}
-              formLabel={"Brand"}
-              placeholder="Choose your Brand"
+              formLabel={"Brand Name"}
+              placeholder="Choose your brand name"
               name={"brandId"}
               options={optionBrand}
-              onInputChange={() => { }}
-              inputPlaceholder={""}
-            />
+              modelName={"Brand"}
+              setStateOption={setOptionBrand} />
+
 
             {/* Price */}
             <InputForm

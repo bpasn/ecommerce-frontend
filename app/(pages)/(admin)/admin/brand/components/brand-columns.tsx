@@ -17,7 +17,12 @@ export const columns: ColumnDef<BrandColumns>[] = [
     },
     {
         accessorKey: "image",
-        cell:({row}) => <Image src={row.original.image} alt='brand' width={50} height={50} className='object-contain'/>
+        header:"Logo Brand",
+        cell:({row}) => {
+            return row.original.image ? (
+                <Image src={row.original.image} alt='brand' width={50} height={50} className='object-contain'/>
+            ) : "No Image"
+        }
     },
    
     {

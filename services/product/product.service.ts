@@ -3,6 +3,8 @@ import AxiosService from "../axiosService";
 import prismadb from "@/lib/prismadb.util";
 import { IFindByName, IProductService } from "@/services/product/product";
 import _ from 'lodash';
+import { Prisma } from "@prisma/client";
+import { DefaultArgs } from "@prisma/client/runtime/library";
 export default class ProductService implements IProductService {
     private sAxios: AxiosService;
     constructor(sAxios: AxiosService) {
@@ -49,9 +51,22 @@ export default class ProductService implements IProductService {
     }
 
 
-    async getProduct(): Promise<IProductModel[]> {
-        // const response = await this.sAxios.get<IProductModel[]>("https://fakestoreapi.com/products");
+    async getProduct(categoryName?: string, take?: number): Promise<IProductModel[]> {
+        const option: Prisma.ProductsFindManyArgs<DefaultArgs> = {};
+
+        if (categoryName) {
+            option.where = {
+                category: {
+                    name: categoryName
+                }
+            }
+        }
+        if (take) {
+            option.take = take;
+        }
+
         const products = await prismadb.products.findMany({
+            ...option,
             include: {
                 category: true,
                 images: true,
@@ -162,7 +177,7 @@ export default class ProductService implements IProductService {
                     create: {
                         feature: {
                             create: {
-                                title,
+                                title: description?.feature.title!,
                                 lists: {
                                     createMany: {
                                         data: [...description?.feature.lists!]
@@ -191,6 +206,47 @@ export default class ProductService implements IProductService {
             message: "Update product success",
             success: true
         };
+    }
+
+    async getProductRelated(categoryName: string): Promise<IProductModel[]> {
+        const result = await prismadb.products.findMany({
+            where: {
+                category: {
+                    name: categoryName
+                }
+            },
+            take: 4,
+            include: {
+                category: true,
+                images: true,
+                subCategory: true,
+                brand: true,
+                description: {
+                    include: {
+                        feature: {
+                            include: {
+                                lists: true
+                            }
+                        }
+                    }
+                }
+            }
+        })
+
+        const formatProducts: IProductModel[] = result.map((product) => {
+            return ({
+                id: product.id,
+                name: product.name,
+                category: product.category.name,
+                oldPrice: Number(product.price),
+                description: product.description!,
+                images: product.images.map(e => e.image),
+                price: String(Number(product.price)),
+                qty: product.qty
+            });
+        });
+
+        return formatProducts;
     }
 
 }

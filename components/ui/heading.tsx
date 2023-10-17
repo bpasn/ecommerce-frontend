@@ -6,7 +6,7 @@ interface HeaderProps {
     description: string;
 }
 
-const Hearding: React.FC<HeaderProps> = ({
+const Heading: React.FC<HeaderProps> = ({
     title,
     description
 }) => {
@@ -18,4 +18,4 @@ const Hearding: React.FC<HeaderProps> = ({
     )
 }
 
-export default Hearding
+export default Heading

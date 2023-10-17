@@ -21,8 +21,11 @@ import {
     SelectValue
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { cn } from "@/lib/utils";
-import { ChangeEventHandler, useEffect, useState } from "react";
+import { cn, wait } from "@/lib/utils";
+import { ChangeEventHandler, SetStateAction, useCallback, useEffect, useState } from "react";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { Prisma } from "@prisma/client";
 
 
 export declare type UseControllerProps<
@@ -146,14 +149,25 @@ export function SelectField<T extends FieldValues>({
     );
 }
 
+
+const CancelToken = axios.CancelToken;
+let cancel: any;
+export enum API_SEARCH_INPUT {
+    CATEGORIES = "categories",
+    PRODUCTS = "products",
+    SUB_CATEGORIES = "sub-categories",
+    ORDERS = "orders",
+    BRAND = "brand"
+}
 interface SearchSelectFieldProps<T extends FieldValues> extends InputFormProps<T> {
-    options: OptionSelect[];
-    routeApi:string;
     onClick?: () => void;
     onInputChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    inputPlaceholder: string;
-    onSelectItem?: (v: string) => void;
+    inputPlaceholder?: string;
+    modelName: Prisma.ModelName;
+    setStateOption: React.Dispatch<SetStateAction<OptionSelect[]>>;
+    options: OptionSelect[];
 }
+
 export function SearchSelectField<T extends FieldValues>({
     formLabel,
     control,
@@ -162,67 +176,92 @@ export function SearchSelectField<T extends FieldValues>({
     placeholder = "Please enter your " + name,
     inputPlaceholder = "Search input",
     options,
-    onInputChange,
     onClick,
-    onSelectItem
+    setStateOption,
+    modelName
 }: SearchSelectFieldProps<T>) {
     const [inputSearch, setInputSearch] = useState<string>("");
-
+    const [loading, setLoading] = useState<boolean>(false);
+    const callApi = useCallback(async () => {
+        setLoading(true);
+        try {
+            const response = await axios.get<OptionSelect[]>(`/api/search`, {
+                params: {
+                    model: modelName,
+                    value: inputSearch
+                },
+                cancelToken: new CancelToken(function executor(c) {
+                    cancel = c;
+                })
+            });
+            setStateOption(response.data);
+            setLoading(false);
+        } catch (error: any) {
+            if (axios.isCancel(error)) {
+                return;
+            }
+            toast.error(error.message);
+            setLoading(false);
+        }
+    }, [inputSearch])
     useEffect(() => {
         if (inputSearch.length >= 4) {
-
+            if (cancel) {
+                cancel();
+            }
+            callApi();
         }
     }, [inputSearch]);
     return (
         <FormField
             control={control}
             name={name}
-            render={({ field }) => (
-                <FormItem>
-                    <FormLabel>{formLabel}</FormLabel>
-                    <Select
-                        onOpenChange={(e) => {
-                            if (e && !options.length) {
-                                onClick?.();
-                            }
-                        }}
-
-                        disabled={disabled}
-                        onValueChange={(v) => {
-                            field.onChange(v);
-                            onSelectItem?.(v);
-                        }}
-                        defaultValue={field.value}
-                        value={field.value}
-                    >
-                        <FormControl>
-                            <SelectTrigger value={field.value} defaultValue={field.value} placeholder={placeholder}>
-                                <SelectValue
-                                    defaultValue={field.value}
-                                    placeholder={placeholder}
-                                />
-                            </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                            <div className="mb-2">
-                                <Input placeholder={inputPlaceholder} onChange={onInputChange} />
-                            </div>
-                            {options.length ? options.map((o: any) => (
-                                <SelectItem
-                                    key={o.value}
-                                    value={o.value}
-                                    className="cursor-pointer"
-                                >
-                                    {o.name}
-                                </SelectItem>
-                            )) : disabled ? "Loading..." : (
-                                <div className="p-2">No Result</div>
-                            )}
-                        </SelectContent>
-                    </Select>
-                    <FormMessage />
-                </FormItem>
-            )}
+            render={({ field }) => {
+                console.log(field.value)
+                return (
+                    <FormItem>
+                        <FormLabel>{formLabel}</FormLabel>
+                        <Select
+                            onOpenChange={(e) => {
+                                if (e) {
+                                    onClick?.();
+                                }
+                            }}
+    
+                            disabled={disabled}
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                            value={field.value}
+                        >
+                            <FormControl>
+                                <SelectTrigger value={field.value} defaultValue={field.value} placeholder={placeholder}>
+                                    <SelectValue
+                                        defaultValue={field.value}
+                                        placeholder={placeholder}
+                                    />
+                                </SelectTrigger>
+                            </FormControl>
+                            <SelectContent >
+                                <div className="mb-2">
+                                    <Input placeholder={inputPlaceholder} onChange={(e) => setInputSearch(e.target.value)} />
+                                </div>
+                                {options.length ? options.map((o: any) => (
+                                    <SelectItem
+                                        key={o.value}
+                                        value={o.value}
+                                        className="cursor-pointer"
+                                    >
+                                        {o.name}
+                                    </SelectItem>
+                                )) : (loading || disabled) ? "Loading..." : (
+                                    <div className="p-2">No Result</div>
+                                )}
+                            </SelectContent>
+                        </Select>
+                        <FormMessage />
+                    </FormItem>
+                )
+            }}
         />
     );
 }

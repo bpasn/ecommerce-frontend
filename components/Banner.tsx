@@ -12,17 +12,20 @@ import { cn, wait } from "@/lib/utils";
 import { useCallback, useEffect, useState } from "react";
 import { IFindByName } from "@/services/product/product";
 import axios from "axios";
+const cancelToken = axios.CancelToken;
+let cancel:any;
 const Banner = () => {
     const [commandItem, setCommandItem] = useState<IFindByName[]>([]);
     const [valueSearch, setValueSearch] = useState<string>("");
     const [loading, setLoading] = useState(false);
-    const cancelToken = axios.CancelToken;
-    const source = cancelToken.source();
+
     const onSearch = async () => {
         if (valueSearch.length >= 4) {
             setLoading(true);
             const { data } = await axios.get<IFindByName[]>(`/api/products/search/${valueSearch}`, {
-                cancelToken: source.token
+                cancelToken: new cancelToken(function executor(c) {
+                    cancel = c;
+                })
             });
             await wait(3 * 1000);
             setCommandItem(data);
@@ -33,6 +36,7 @@ const Banner = () => {
 
     useEffect(() => {
         if (valueSearch.length >= 4) {
+            if(cancel) cancel();
             onSearch();
         }
     }, [valueSearch]);
@@ -47,7 +51,12 @@ const Banner = () => {
                 <h1 className="text-5xl text-gray-50">Tools shop</h1>
                 <p className="text-2xl text-gray-50">ศูนย์รวมเครื่องมือช่างเกรดพรีเมี่ยมสำหรับงานอุตสาหกรรมครบวงจร</p>
                 <div className="w-full p-5 m-5">
-                    <StoreSwitcher loading={loading} itemsCommand={commandItem} className={cn("p-2")} onChangeSearch={(v) => setValueSearch(v)} />
+                    <StoreSwitcher
+                        loading={loading}
+                        itemsCommand={commandItem}
+                        className={cn("p-2")}
+                        onChangeSearch={(v) => setValueSearch(v)}
+                    />
                 </div>
             </div>
             {/* <Carousel

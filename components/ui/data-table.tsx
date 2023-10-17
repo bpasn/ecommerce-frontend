@@ -10,7 +10,7 @@ import {
     getPaginationRowModel,
     useReactTable
 } from '@tanstack/react-table';
-
+import { Pagination } from '@mui/material'
 import {
     Table,
     TableBody,
@@ -25,6 +25,7 @@ interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
     data: TData[];
     searchKey?: string;
+    
 };
 
 export function DataTable<TData, TValue>({
@@ -45,6 +46,10 @@ export function DataTable<TData, TValue>({
         }
     });
 
+    const [dataState, setDataState] = useState({
+        pageSize: [10, 15, 25, 50, 100],
+        pageLimit: 10
+    });
     return (
         <div>
             {searchKey && (
@@ -60,13 +65,13 @@ export function DataTable<TData, TValue>({
                 </div>
             )}
             <div className="rounded-md border">
-                <Table>
+                <Table >
                     <TableHeader>
                         {table.getHeaderGroups().map(headerGroup => (
                             <TableRow key={headerGroup.id}>
                                 {headerGroup.headers.map(header => {
                                     return (
-                                        <TableHead {...header.getLeafHeaders}  rowSpan={2} key={header.id} >
+                                        <TableHead {...header.getLeafHeaders} rowSpan={2} key={header.id} >
                                             {header.isPlaceholder
                                                 ? null
                                                 : flexRender(
@@ -104,7 +109,7 @@ export function DataTable<TData, TValue>({
                 </Table>
             </div>
             <div className="flex items-center justify-end space-x-2 py-4">
-                <Button
+                {/* <Button
                     variant="outline"
                     size="sm"
                     onClick={() => table.previousPage()}
@@ -118,7 +123,9 @@ export function DataTable<TData, TValue>({
                     onClick={() => table.nextPage()}
                     disabled={!table.getCanNextPage() || !data.length}>
                     Next
-                </Button>
+                </Button> */}
+                <Pagination count={10} />
+
             </div>
         </div>
     );

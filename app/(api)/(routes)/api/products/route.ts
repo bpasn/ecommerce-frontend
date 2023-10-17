@@ -35,7 +35,9 @@ import { type NextRequest, NextResponse } from "next/server";
 export const GET = async (req: Request) => {
     const sProduct: ProductService = new ProductService(AxiosService.getInstance());
     try {
-        const payload = await sProduct.getProduct();
+        const searchParams = new URL(req.url).searchParams;
+        const categoryName = searchParams.get("categoryName");
+        const payload = await sProduct.getProduct(categoryName!);
         return NextResponse.json({
             success: true,
             payload
