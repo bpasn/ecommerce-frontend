@@ -10,7 +10,7 @@ import {
     getPaginationRowModel,
     useReactTable
 } from '@tanstack/react-table';
-import { Pagination } from '@mui/material'
+import { Pagination } from '@mui/material';
 import {
     Table,
     TableBody,
@@ -19,19 +19,27 @@ import {
     TableHeader,
     TableRow
 } from "@/components/ui/table";
-import { useState } from 'react';
+import { SetStateAction, useState } from 'react';
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
     data: TData[];
     searchKey?: string;
-    
+    onPaginationChange?: (page: number) => void;
+    countData: number;
+    pageLimit?: number;
+    loading?: boolean;
 };
 
+const pageSize = [10, 15, 25, 50, 100];
 export function DataTable<TData, TValue>({
     columns,
     data,
-    searchKey
+    searchKey,
+    onPaginationChange,
+    countData = 0,
+    pageLimit = 10,
+    loading = false
 }: DataTableProps<TData, TValue>) {
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
     const table = useReactTable({
@@ -47,9 +55,13 @@ export function DataTable<TData, TValue>({
     });
 
     const [dataState, setDataState] = useState({
-        pageSize: [10, 15, 25, 50, 100],
-        pageLimit: 10
+        pageSize: pageSize,
+        pageLimit: pageLimit,
     });
+
+    const onPageChange = (e: React.ChangeEvent<unknown>, p: number) => {
+        onPaginationChange?.(p);
+    };
     return (
         <div>
             {searchKey && (
@@ -101,7 +113,7 @@ export function DataTable<TData, TValue>({
                         ) : (
                             <TableRow>
                                 <TableCell colSpan={columns.length} className="h-24 text-center">
-                                    No Results.
+                                    {loading ? "Loading..." : "No Results."}
                                 </TableCell>
                             </TableRow>
                         )}
@@ -124,7 +136,7 @@ export function DataTable<TData, TValue>({
                     disabled={!table.getCanNextPage() || !data.length}>
                     Next
                 </Button> */}
-                <Pagination count={10} />
+                <Pagination count={Math.ceil(countData / pageLimit)} onChange={onPageChange} />
 
             </div>
         </div>
