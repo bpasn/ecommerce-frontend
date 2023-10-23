@@ -1,6 +1,6 @@
 'use client';
 import { Button } from '@/components/ui/button';
-import { DataTable } from '@/components/ui/data-table';
+import { DataTable, IDataTable } from '@/components/ui/data-table';
 import { Separator } from '@/components/ui/separator';
 import { Plus } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -17,58 +17,67 @@ const SubCategoryClient: React.FC<SubCategoryClientProps> = ({
     data
 }) => {
     const router = useRouter();
-    const effectCalled = useRef<boolean>(true);
-    const effect = useRef<any>(null);
     const [loading, setLoading] = useState(false);
-    const [dataTable, setDataTable] = useState<{
-        count: number;
-        data: SubCategoryColumns[];
-        page: number;
-        start: number;
-    }>({
+    const [getData, setGetData] = useState(true);
+    const [dataTable, setDataTable] = useState<IDataTable<SubCategoryColumns>>({
         count: 0,
         data: [],
         page: 0,
-        start: 0,
+        pageSize: 20
     });
 
-    const getDataTable = async () => {
+    const getDataTable = useCallback(async () => {
         setLoading(true);
-        const result = await axios.get("/api/sub-categories/search/?start=0&limit=10");
-        setLoading(false);
-        setDataTable(prv => ({
-            ...prv,
-            data: result.data.data,
-            count: result.data.count
-        }));
+        if (getData) {
+            const result = await axios.get(
+                `/api/sub-categories/search/`,
+                {
+                    params: {
+                        limit: dataTable.pageSize,
+                        page: dataTable.page,
+                        categoryName: "",
+                        subCategoryName: ""
+                    }
+                }
+            );
+            setLoading(false);
+            setDataTable(prv => ({
+                ...prv,
+                data: result.data.data,
+                count: result.data.count
+            }));
         }
-        useEffect(() => {
+    }, [getData, dataTable]);
+    useEffect(() => {
+        if (getData) {
+            console.log(dataTable);
             getDataTable();
-        }, []);
-        return (
-            <>
-                <div className="flex items-center justify-between">
-                    <Heading
-                        title={`SubCategorys(${data.length})`}
-                        description='SubCategorys'
-                    />
-                    <Button onClick={() => router.push(`/admin/sub-categories/new`)}>
-                        <Plus className="mr-2 h-4 w-4" />
-                        Add New
-                    </Button>
-                </div>
-                <Separator />
-                <DataTable
-                    columns={columns}
-                    loading={loading}
-                    countData={dataTable.count}
-                    data={dataTable.data}
-                    onPaginationChange={(page) => {
-                        setDataTable(prv => ({ ...prv, page: page + 1 }));
-                    }}
+        }
+        return () => setGetData(false);
+    }, [getData, dataTable]);
+    return (
+        <>
+            <div className="flex items-center justify-between">
+                <Heading
+                    title={`SubCategorys(${data.length})`}
+                    description='SubCategorys'
                 />
-            </>
-        );
-    };
+                <Button onClick={() => router.push(`/admin/sub-categories/new`)}>
+                    <Plus className="mr-2 h-4 w-4" />
+                    Add New
+                </Button>
+            </div>
+            <Separator />
+            <DataTable
+                setDataTable={setDataTable}
+                columns={columns}
+                loading={loading}
+                dataTable={dataTable}
+                onChangePageSize={() => setGetData(true)}
+                onPaginationChange={() => setGetData(true)}
+            />
+        </>
+    );
+};
 
-    export default SubCategoryClient;
+export default SubCategoryClient;
