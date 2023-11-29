@@ -20,13 +20,6 @@ module.exports = {
       top: 'top',
       'top-4': 'center top 1rem',
     },
-    container: {
-      center: true,
-      padding: "2rem",
-      screens: {
-        "2xl": "1400px",
-      },
-    },
     extend: {
       fontFamily: {
         bodyFont: ["Poppins", "sans-serif"],
